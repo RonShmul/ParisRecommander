@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 
 //complete your code here
 
-app.get('/',(req,res)=>{
+app.get('/',function (req, res){
     res.send('hello');
 });
 
