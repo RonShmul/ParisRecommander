@@ -15,7 +15,7 @@ var connectionConfig = {
     userName: 'paris',
     password: 'Aa123123',
     server: 'parisbgu.database.windows.net',
-    options: { encrypt: true, database: 'SHOP_SERVER' }
+    options: { encrypt: true, database: 'paris_DB' }
 };
 
 //create the pool
