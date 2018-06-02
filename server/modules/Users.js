@@ -327,6 +327,7 @@ router.post("/auth/AddReview", function(req, res){
     });    
 });
 
+//return promise for insert review
 function insertReview(username, Poi, Review){
     return new Promise(function(resolve , reject){
         
@@ -339,10 +340,69 @@ function insertReview(username, Poi, Review){
         })
     });
 }
+
+//return promise for update review
 function updateReview(username, Poi, Review){
     return new Promise(function(resolve , reject){
+        if(Review != null)
+            Review = `'`+Review+`'`;
+        DButilsAzure.execQuery(`UPDATE Users_reviews SET Review = `+Review+` WHERE PointName ='`+ Poi + `' AND Username = '`+username+`'`)
+        .then(function(result){
+            resolve(result);
+        })
+        .catch(function(err){
+            reject(err);
+        })
+    });
+}
+//delete review
+router.delete("/auth/deleteReview", function(req, res){
+    let username = req.Username;
+    let Poi = req.body.PointName;
+
+    DButilsAzure.execQuery(`SELECT * FROM Users_reviews WHERE Username = '`+ username +`' AND PointName ='`+ Poi + `'`)
+    .then((response) =>{
+        if(response.length == 0) {
+            res.status(400).json({message: 'Review does not exist'});
+        }
+        else {
+            return updateReview(username, Poi, null);
+        }
+    }).then(function(result) {
+        res.send(result);
+    })
+    .catch(function(err) {
+        res.status(400).json({message: err.message});
+    });    
+});
+
+//Add a rate for point of interest
+router.post("/auth/AddRate", function(req, res){
+    let username = req.Username;
+    let Poi = req.body.PointName;
+    let rate = req.body.Rate;
+
+    DButilsAzure.execQuery(`SELECT * FROM Users_reviews WHERE Username = '`+ username +`' AND PointName ='`+ Poi + `'`)
+    .then((response) =>{
+        if(response.length == 0) {
+            return insertRate(username, Poi, rate);
+        }
+        else {
+            return updateRate(username, Poi, rate);
+        }
+    }).then(function(result) {
+        res.send(result);
+    })
+    .catch(function(err) {
+        res.status(400).json({message: err.message});
+    });    
+});
+
+//return promise for insert Rate
+function insertRate(username, Poi, Rate){
+    return new Promise(function(resolve , reject){
         
-        DButilsAzure.execQuery(`UPDATE Users_reviews SET Review = '`+Review+`' WHERE PointName ='`+ Poi + `' AND Username = '`+username+`'`)
+        DButilsAzure.execQuery(`INSERT INTO Users_reviews (Username, PointName, Rate, DateReview) VALUES ('`+username+`', '`+Poi+`', `+Rate+`, GETDATE())`)
         .then(function(result){
             resolve(result);
         })
@@ -352,6 +412,39 @@ function updateReview(username, Poi, Review){
     });
 }
 
+//return promise for update Rate
+function updateRate(username, Poi, Rate){
+    return new Promise(function(resolve , reject){
+
+        DButilsAzure.execQuery(`UPDATE Users_reviews SET Rate = `+Rate+` WHERE PointName ='`+ Poi + `' AND Username = '`+username+`'`)
+        .then(function(result){
+            resolve(result);
+        })
+        .catch(function(err){
+            reject(err);
+        })
+    });
+}
+//delete Rate
+router.delete("/auth/deleteRate", function(req, res){
+    let username = req.Username;
+    let Poi = req.body.PointName;
+
+    DButilsAzure.execQuery(`SELECT * FROM Users_reviews WHERE Username = '`+ username +`' AND PointName ='`+ Poi + `'`)
+    .then((response) =>{
+        if(response.length == 0) {
+            res.status(400).json({message: 'Rate does not exist'});
+        }
+        else {
+            return updateRate(username, Poi, null);
+        }
+    }).then(function(result) {
+        res.send(result);
+    })
+    .catch(function(err) {
+        res.status(400).json({message: err.message});
+    });    
+});
 //send token to client side
   function sendToken(user, res) {
 
