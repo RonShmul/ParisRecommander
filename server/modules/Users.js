@@ -143,7 +143,7 @@ router.use('/auth', function(req, res, next) {
 
 //get 2 popular points of interests of the user's chosen categories
 router.post('/auth/getUserTopPointsOfInterests', function (req, res){
-  
+   //##############################################################
     DButilsAzure.execQuery(`SELECT TOP (2) poi.* FROM Points_of_interests as poi INNER JOIN (select Category FROM Users_Categories WHERE Username = '`+req.Username+`') as uc ON poi.Category = uc.Category order by Rate desc`)
     .then((response, err) => {
         if(err)
@@ -209,18 +209,86 @@ router.post('/auth/insertToFavorites', function (req, res, next){
         });
 });
 
-router.post('/auth/DeleteFromFavorites', function (req, res, next){
+//Delete a point from the user's favorites
+router.delete('/auth/DeleteFromFavorites', function (req, res, next){
     let poi = req.body.PointName;
     DButilsAzure.execQuery(`SELECT * FROM db.Users_Favorites WHERE PointName='` + poi + `'`)
-    .then()
+    .then((response, err) =>{
+        if(err)
+            res.status(400).json({message: err.message});
+        else{            
+            if(response.length == 0) {
+                res.status(400).json({message: 'The point of interest is not in your favorites list'});                
+            }
+            else {
+                next();
+            }            
+        }
+    })
     .catch(function(err) {
         res.status(400).json({message: err.message});
     });
 
+}, function(req, res){
+    let poi = req.body.PointName;
+    DButilsAzure.execQuery(`DELETE * FROM db.Users_Favorites WHERE PointName='` + poi + `'`)
+    .then((response, err) => {
+        if(err)
+            res.status(400).json({message: err.message});
+        else{            
+            res.status(200).json({message: "The Point of interest was deleted from your favorites"});            
+        }
+})
+.catch(function(err) {
+        res.status(400).json({message: err.message});
+    });
 });
 
-checkIfExists(){
-    return new Promise(response, err) => {
+
+//last two points that saved in the favorites
+router.post('/auth/LastSaved', function (req, res, next){
+    DButilsAzure.execQuery(`SELECT TOP (2) * FROM db.Users_Favorites order by SavedIndex desc`)
+    .then((response, err) =>{
+        if(err)
+            res.status(400).json({message: err.message});
+        else{            
+            if(response.length == 0) {
+                res.status(400).json({message: 'There is not last saved points'});
+            }
+            else {
+                res.sendStatus(200);                
+            }            
+        }
+    })
+    .catch(function(err) {
+        res.status(400).json({message: err.message});
+    });    
+});
+
+
+//Show favorites points of interest
+router.post('/auth/FavoritePointsOfInterests', function (req, res, next){
+    DButilsAzure.execQuery(`SELECT TOP (2) * FROM db.Users_Favorites order by SavedIndex desc`)
+    .then((response, err) =>{
+        if(err)
+            res.status(400).json({message: err.message});
+        else{            
+            if(response.length == 0) {
+                res.status(400).json({message: 'There is not last saved points'});
+            }
+            else {
+                res.sendStatus(200);                
+            }            
+        }
+    })
+    .catch(function(err) {
+        res.status(400).json({message: err.message});
+    });    
+});
+
+var checkIfExists = function(){  //################ if i will understand chaining promise
+    return new Promise(
+        function(response, err){
         if(err)
             res.status(400).json({message: err.message});
         else{
@@ -230,8 +298,9 @@ checkIfExists(){
             else {
                 next()
             }
-    }
-})
+        }
+        }
+    );
 }
 
   function sendToken(user, res) {
