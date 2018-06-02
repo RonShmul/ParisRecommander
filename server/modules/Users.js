@@ -125,7 +125,7 @@ router.post('/restorePassword', (req, res) => {
   });
 
 });
-
+/**************************************after the user is logged in ****************************/
 router.use('/auth', function(req, res, next) {
     var token=req.body.token||req.query.token||req.headers['x-access-token'];
     if(token){
@@ -141,6 +141,7 @@ router.use('/auth', function(req, res, next) {
     }
 });
 
+//get 2 popular points of interests of the user's chosen categories
 router.post('/auth/getUserTopPointsOfInterests', function (req, res){
   
     DButilsAzure.execQuery(`SELECT TOP (2) poi.* FROM Points_of_interests as poi INNER JOIN (select Category FROM Users_Categories WHERE Username = '`+req.Username+`') as uc ON poi.Category = uc.Category order by Rate desc`)
@@ -157,6 +158,81 @@ router.post('/auth/getUserTopPointsOfInterests', function (req, res){
 
 });
 
+//save point of interest to user's favorites list
+router.post('/auth/insertToFavorites', function (req, res, next){
+    let poi = req.body.PointName;
+
+    DButilsAzure.execQuery(`SELECT * FROM db.Users_Favorites WHERE PointName='` + poi + `'`)
+    .then((response, err) => {
+        if(err)
+            res.status(400).json({message: err.message});
+        else{
+            if(response.length == 0) {
+                next();
+            }
+            else {
+                res.status(400).json({message: 'The point of interest is already in the favorites list'});
+            }
+    }
+})
+    .catch(function(err) {
+        res.status(400).json({message: err.message});
+    });
+
+}, function(req, res, next){
+    let poi = req.body.PointName;
+    DButilsAzure.execQuery(`SELECT TOP (1) * from db.Users_Favorites order by PriorityIndex desc`)
+    .then((response, err) => {
+        if(err)
+            res.status(400).json({message: err.message});
+        else{
+            let newPriority = response.PriorityIndex + 1;            
+            req.PriorityIndex = newPriority;
+            next();            
+            }
+    })
+    .catch(function(err) {
+        res.status(400).json({message: err.message});
+    });
+}, function(req, res){
+        let poi = req.body.PointName;
+        DButilsAzure.execQuery(`INSERT INTO db.Users_Favorites (Username, PointName, PriorityIndex) VALUES (`+req.Username+`, `+poi+` , `+req.PriorityIndex+`)`)
+        .then((response, err) => {
+            if(err)
+                res.status(400).json({message: err.message});
+            else{            
+                res.sendStatus(200);            
+            }
+    })
+    .catch(function(err) {
+            res.status(400).json({message: err.message});
+        });
+});
+
+router.post('/auth/DeleteFromFavorites', function (req, res, next){
+    let poi = req.body.PointName;
+    DButilsAzure.execQuery(`SELECT * FROM db.Users_Favorites WHERE PointName='` + poi + `'`)
+    .then()
+    .catch(function(err) {
+        res.status(400).json({message: err.message});
+    });
+
+});
+
+checkIfExists(){
+    return new Promise(response, err) => {
+        if(err)
+            res.status(400).json({message: err.message});
+        else{
+            if(response.length == 0) {
+                res.status(400).json({message: 'The point of interest does not exist in the favorites list'});
+            }
+            else {
+                next()
+            }
+    }
+})
+}
 
   function sendToken(user, res) {
 
