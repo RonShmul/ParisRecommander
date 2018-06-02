@@ -267,17 +267,17 @@ router.post('/auth/LastSaved', function (req, res, next){
 
 
 //Show favorites points of interest
-router.post('/auth/FavoritePointsOfInterests', function (req, res, next){
-    DButilsAzure.execQuery(`SELECT TOP (2) * FROM db.Users_Favorites order by SavedIndex desc`)
+router.post('/auth/FavoritePointsOfInterest', function (req, res, next){
+    DButilsAzure.execQuery(`SELECT * FROM db.Users_Favorites WHERE Username = '`+ req.Username + `' order by PriorityIndex`)
     .then((response, err) =>{
         if(err)
             res.status(400).json({message: err.message});
         else{            
             if(response.length == 0) {
-                res.status(400).json({message: 'There is not last saved points'});
+                res.status(400).json({message: 'There is not saved points in favorites'});
             }
             else {
-                res.sendStatus(200);                
+                res.sendStatus(200);
             }            
         }
     })
@@ -286,21 +286,61 @@ router.post('/auth/FavoritePointsOfInterests', function (req, res, next){
     });    
 });
 
-var checkIfExists = function(){  //################ if i will understand chaining promise
-    return new Promise(
-        function(response, err){
-        if(err)
+
+//Save favorites sorted by priority
+router.post('/auth/SaveFavoritesList', function (req, res, next){
+    for(var i = 1; i <= req.body.Points.length; i++) {
+        DButilsAzure.execQuery(`UPDATE dbo.Users_Favorites SET PriorityIndex = '`+i+` WHERE PointName ='`+ req.body.Points[i-1])
+        .then((response, err) => {
+            if(err)
+                res.status(400).json({message: err.message});
+            else{
+                res.sendStatus(200);                
+            }
+        })
+        .catch(function(err) {
             res.status(400).json({message: err.message});
-        else{
-            if(response.length == 0) {
-                res.status(400).json({message: 'The point of interest does not exist in the favorites list'});
-            }
-            else {
-                next()
-            }
+        });
+    }
+});
+
+
+//Add a review for point of interest
+router.post("/auth/AddReview", function(req, res){
+    let username = req.Username;
+    let Poi = req.body.PointName;
+    DButilsAzure.execQuery(`SELECT * FROM db.Users_reviews WHERE Username = '`+ username +`' AND 'PointName ='`+ Poi)
+    .then((response) =>{
+        if(response.length == 0) {
+            
         }
-        }
-    );
+        let username = req.Username;
+        let Poi = req.body.PointName;
+        let review = req.body.Review;
+        DButilsAzure.execQuery(`INSERT INTO db.Users_reviews (Username, PointName, Review, DateReview) VALUES ('`+username+`,`+Poi+`,`+review+`, GETDATE())`)
+    })
+    .catch(function(err) {
+        res.status(400).json({message: err.message});
+    });    
+});
+
+
+var checkIfExists = function(){  //################ if i will understand chaining promise
+    return DButilsAzure.execQuery(`SELECT * FROM db.Users_reviews WHERE Username = '`+ req.Username + `' order by PriorityIndex`)
+    // return new Promise(
+    //     function(response, err){
+    //     if(err)
+    //         res.status(400).json({message: err.message});
+    //     else{
+    //         if(response.length == 0) {
+    //             res.status(400).json({message: 'The point of interest does not exist in the favorites list'});
+    //         }
+    //         else {
+    //             next()
+    //         }
+    //     }
+    //     }
+    // );
 }
 
   function sendToken(user, res) {
