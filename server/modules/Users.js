@@ -342,7 +342,7 @@ function insertReview(username, Poi, Review){
 function updateReview(username, Poi, Review){
     return new Promise(function(resolve , reject){
         
-        DButilsAzure.execQuery(`UPDATE Users_reviews SET Review = '`+Review+`' WHERE PointName ='`+ Poi + `AND Review = '`+Review+`'`)
+        DButilsAzure.execQuery(`UPDATE Users_reviews SET Review = '`+Review+`' WHERE PointName ='`+ Poi + `' AND Username = '`+username+`'`)
         .then(function(result){
             resolve(result);
         })
