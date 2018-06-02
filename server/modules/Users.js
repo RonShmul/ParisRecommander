@@ -162,7 +162,7 @@ router.post('/auth/getUserTopPointsOfInterests', function (req, res){
 router.post('/auth/insertToFavorites', function (req, res, next){
     let poi = req.body.PointName;
 
-    DButilsAzure.execQuery(`SELECT * FROM db.Users_Favorites WHERE PointName='` + poi + `'`)
+    DButilsAzure.execQuery(`SELECT * FROM db.Users_Favorites WHERE PointName= '` + poi + `'`)
     .then((response, err) => {
         if(err)
             res.status(400).json({message: err.message});
@@ -196,7 +196,7 @@ router.post('/auth/insertToFavorites', function (req, res, next){
     });
 }, function(req, res){
         let poi = req.body.PointName;
-        DButilsAzure.execQuery(`INSERT INTO db.Users_Favorites (Username, PointName, PriorityIndex) VALUES (`+req.Username+`, `+poi+` , `+req.PriorityIndex+`)`)
+        DButilsAzure.execQuery(`INSERT INTO db.Users_Favorites (Username, PointName, PriorityIndex) VALUES ('`+req.Username+`', '`+poi+`' , `+req.PriorityIndex+`)`)
         .then((response, err) => {
             if(err)
                 res.status(400).json({message: err.message});
@@ -311,7 +311,7 @@ router.post("/auth/AddReview", function(req, res){
     let Poi = req.body.PointName;
     let review = req.body.Review;
 
-    DButilsAzure.execQuery(`SELECT * FROM db.Users_reviews WHERE Username = '`+ username +`' AND 'PointName ='`+ Poi)
+    DButilsAzure.execQuery(`SELECT * FROM Users_reviews WHERE Username = '`+ username +`' AND PointName ='`+ Poi + `'`)
     .then((response) =>{
         if(response.length == 0) {
             return insertReview(username, Poi, review);
@@ -330,7 +330,7 @@ router.post("/auth/AddReview", function(req, res){
 function insertReview(username, Poi, Review){
     return new Promise(function(resolve , reject){
         
-        DButilsAzure.execQuery(`INSERT INTO db.Users_reviews (Username, PointName, Review, DateReview) VALUES ('`+username+`', '`+Poi+`', '`+review+`', GETDATE())`)
+        DButilsAzure.execQuery(`INSERT INTO Users_reviews (Username, PointName, Review, DateReview) VALUES ('`+username+`', '`+Poi+`', '`+Review+`', GETDATE())`)
         .then(function(result){
             resolve(result);
         })
@@ -342,7 +342,7 @@ function insertReview(username, Poi, Review){
 function updateReview(username, Poi, Review){
     return new Promise(function(resolve , reject){
         
-        DButilsAzure.execQuery(`UPDATE db.Users_reviews SET Review = '`+Review+`' WHERE PointName ='`+ Poi + `AND Review = '`+Review+`'`)
+        DButilsAzure.execQuery(`UPDATE Users_reviews SET Review = '`+Review+`' WHERE PointName ='`+ Poi + `AND Review = '`+Review+`'`)
         .then(function(result){
             resolve(result);
         })
