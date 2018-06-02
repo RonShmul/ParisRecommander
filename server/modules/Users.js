@@ -351,6 +351,8 @@ function updateReview(username, Poi, Review){
         })
     });
 }
+
+//send token to client side
   function sendToken(user, res) {
 
     var token = jwt.sign(user, superSecret, {
