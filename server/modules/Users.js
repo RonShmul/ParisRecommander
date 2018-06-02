@@ -309,40 +309,48 @@ router.post('/auth/SaveFavoritesList', function (req, res, next){
 router.post("/auth/AddReview", function(req, res){
     let username = req.Username;
     let Poi = req.body.PointName;
+    let review = req.body.Review;
+
     DButilsAzure.execQuery(`SELECT * FROM db.Users_reviews WHERE Username = '`+ username +`' AND 'PointName ='`+ Poi)
     .then((response) =>{
         if(response.length == 0) {
-            
+            return insertReview(username, Poi, review);
         }
-        let username = req.Username;
-        let Poi = req.body.PointName;
-        let review = req.body.Review;
-        DButilsAzure.execQuery(`INSERT INTO db.Users_reviews (Username, PointName, Review, DateReview) VALUES ('`+username+`,`+Poi+`,`+review+`, GETDATE())`)
+        else {
+            return updateReview(username, Poi, review);
+        }
+    }).then(function(result) {
+        res.send(result);
     })
     .catch(function(err) {
         res.status(400).json({message: err.message});
     });    
 });
 
-
-var checkIfExists = function(){  //################ if i will understand chaining promise
-    return DButilsAzure.execQuery(`SELECT * FROM db.Users_reviews WHERE Username = '`+ req.Username + `' order by PriorityIndex`)
-    // return new Promise(
-    //     function(response, err){
-    //     if(err)
-    //         res.status(400).json({message: err.message});
-    //     else{
-    //         if(response.length == 0) {
-    //             res.status(400).json({message: 'The point of interest does not exist in the favorites list'});
-    //         }
-    //         else {
-    //             next()
-    //         }
-    //     }
-    //     }
-    // );
+function insertReview(username, Poi, Review){
+    return new Promise(function(resolve , reject){
+        
+        DButilsAzure.execQuery(`INSERT INTO db.Users_reviews (Username, PointName, Review, DateReview) VALUES ('`+username+`', '`+Poi+`', '`+review+`', GETDATE())`)
+        .then(function(result){
+            resolve(result);
+        })
+        .catch(function(err){
+            reject(err);
+        })
+    });
 }
-
+function updateReview(username, Poi, Review){
+    return new Promise(function(resolve , reject){
+        
+        DButilsAzure.execQuery(`UPDATE db.Users_reviews SET Review = '`+Review+`' WHERE PointName ='`+ Poi + `AND Review = '`+Review+`'`)
+        .then(function(result){
+            resolve(result);
+        })
+        .catch(function(err){
+            reject(err);
+        })
+    });
+}
   function sendToken(user, res) {
 
     var token = jwt.sign(user, superSecret, {
