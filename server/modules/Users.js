@@ -143,13 +143,13 @@ router.use('/auth', function(req, res, next) {
 
 //get 2 popular points of interests of the user's chosen categories
 router.post('/auth/getUserTopPointsOfInterests', function (req, res){
-   //##############################################################
+   
     DButilsAzure.execQuery(`SELECT TOP (2) poi.* FROM Points_of_interests as poi INNER JOIN (select Category FROM Users_Categories WHERE Username = '`+req.Username+`') as uc ON poi.Category = uc.Category order by Rate desc`)
     .then((response, err) => {
         if(err)
             res.status(400).json({message: err.message});
         else{
-            res.status(200).json({Points_of_interests: response});
+            res.status(200).json({TopPointsByCategory: response});
             }
     })
     .catch(function(err) {
@@ -162,7 +162,7 @@ router.post('/auth/getUserTopPointsOfInterests', function (req, res){
 router.post('/auth/insertToFavorites', function (req, res, next){
     let poi = req.body.PointName;
 
-    DButilsAzure.execQuery(`SELECT * FROM db.Users_Favorites WHERE PointName= '` + poi + `'`)
+    DButilsAzure.execQuery(`SELECT * FROM Users_Favorites WHERE PointName = '` + poi + `' AND Username = '` + req.Username +`'`)
     .then((response, err) => {
         if(err)
             res.status(400).json({message: err.message});
@@ -181,14 +181,16 @@ router.post('/auth/insertToFavorites', function (req, res, next){
 
 }, function(req, res, next){
     let poi = req.body.PointName;
-    DButilsAzure.execQuery(`SELECT TOP (1) * from db.Users_Favorites order by PriorityIndex desc`)
+    DButilsAzure.execQuery(`SELECT TOP (1) * FROM Users_Favorites WHERE Username = '` + req.Username +`' order by PriorityIndex desc`)
     .then((response, err) => {
         if(err)
             res.status(400).json({message: err.message});
         else{
-            let newPriority = response.PriorityIndex + 1;            
+            let newPriority = 1;
+            if(response.length > 0)
+                newPriority = response[0].PriorityIndex + 1;            
             req.PriorityIndex = newPriority;
-            next();            
+            next();  
             }
     })
     .catch(function(err) {
@@ -196,7 +198,7 @@ router.post('/auth/insertToFavorites', function (req, res, next){
     });
 }, function(req, res){
         let poi = req.body.PointName;
-        DButilsAzure.execQuery(`INSERT INTO db.Users_Favorites (Username, PointName, PriorityIndex) VALUES ('`+req.Username+`', '`+poi+`' , `+req.PriorityIndex+`)`)
+        DButilsAzure.execQuery(`INSERT INTO Users_Favorites (Username, PointName, PriorityIndex) VALUES ('`+req.Username+`', '`+poi+`' , `+req.PriorityIndex+`)`)
         .then((response, err) => {
             if(err)
                 res.status(400).json({message: err.message});
@@ -212,7 +214,7 @@ router.post('/auth/insertToFavorites', function (req, res, next){
 //Delete a point from the user's favorites
 router.delete('/auth/DeleteFromFavorites', function (req, res, next){
     let poi = req.body.PointName;
-    DButilsAzure.execQuery(`SELECT * FROM db.Users_Favorites WHERE PointName='` + poi + `'`)
+    DButilsAzure.execQuery(`SELECT * FROM Users_Favorites WHERE PointName = '` + poi + `' AND Username = '` + req.Username +`'`)
     .then((response, err) =>{
         if(err)
             res.status(400).json({message: err.message});
@@ -231,7 +233,7 @@ router.delete('/auth/DeleteFromFavorites', function (req, res, next){
 
 }, function(req, res){
     let poi = req.body.PointName;
-    DButilsAzure.execQuery(`DELETE * FROM db.Users_Favorites WHERE PointName='` + poi + `'`)
+    DButilsAzure.execQuery(`DELETE FROM Users_Favorites WHERE PointName = '` + poi + `' AND Username = '` + req.Username +`'`)
     .then((response, err) => {
         if(err)
             res.status(400).json({message: err.message});
@@ -247,7 +249,7 @@ router.delete('/auth/DeleteFromFavorites', function (req, res, next){
 
 //last two points that saved in the favorites
 router.post('/auth/LastSaved', function (req, res, next){
-    DButilsAzure.execQuery(`SELECT TOP (2) * FROM db.Users_Favorites order by SavedIndex desc`)
+    DButilsAzure.execQuery(`SELECT TOP (2) * FROM Users_Favorites WHERE Username = '`+ req.Username + `' order by SavedIndex desc`)
     .then((response, err) =>{
         if(err)
             res.status(400).json({message: err.message});
@@ -256,7 +258,7 @@ router.post('/auth/LastSaved', function (req, res, next){
                 res.status(400).json({message: 'There is not last saved points'});
             }
             else {
-                res.sendStatus(200);                
+                res.status(200).json({LastUserPointsOfInterests: response});               
             }            
         }
     })
@@ -268,7 +270,7 @@ router.post('/auth/LastSaved', function (req, res, next){
 
 //Show favorites points of interest
 router.post('/auth/FavoritePointsOfInterest', function (req, res, next){
-    DButilsAzure.execQuery(`SELECT * FROM db.Users_Favorites WHERE Username = '`+ req.Username + `' order by PriorityIndex`)
+    DButilsAzure.execQuery(`SELECT * FROM Users_Favorites WHERE Username = '`+ req.Username + `' order by PriorityIndex`)
     .then((response, err) =>{
         if(err)
             res.status(400).json({message: err.message});
@@ -277,7 +279,7 @@ router.post('/auth/FavoritePointsOfInterest', function (req, res, next){
                 res.status(400).json({message: 'There is not saved points in favorites'});
             }
             else {
-                res.sendStatus(200);
+                res.status(200).json({FavoriteList: response});
             }            
         }
     })
@@ -290,7 +292,7 @@ router.post('/auth/FavoritePointsOfInterest', function (req, res, next){
 //Save favorites sorted by priority
 router.post('/auth/SaveFavoritesList', function (req, res, next){
     for(var i = 1; i <= req.body.Points.length; i++) {
-        DButilsAzure.execQuery(`UPDATE dbo.Users_Favorites SET PriorityIndex = '`+i+` WHERE PointName ='`+ req.body.Points[i-1])
+        DButilsAzure.execQuery(`UPDATE Users_Favorites SET PriorityIndex = `+i+` WHERE PointName = '`+ req.body.Points[i-1]+`'`)
         .then((response, err) => {
             if(err)
                 res.status(400).json({message: err.message});
@@ -306,7 +308,7 @@ router.post('/auth/SaveFavoritesList', function (req, res, next){
 
 
 //Add a review for point of interest
-router.post("/auth/AddReview", function(req, res){
+router.post("/auth/addReview", function(req, res){
     let username = req.Username;
     let Poi = req.body.PointName;
     let review = req.body.Review;

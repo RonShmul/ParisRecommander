@@ -22,22 +22,6 @@ router.get('/getCategories', function (req, res){
 
 });
 
-//get all users############################################################################## maybe can be deleted
-router.get('/getUsers', function (req, res){
-
-    DButilsAzure.execQuery(`SELECT * FROM dbo.Users`)
-    .then((response, err) => {
-        if(err)
-            res.status(400).json({message: err.message});
-        else{
-            res.status(200).json({Users: response});
-            }
-    })
-    .catch(function(err) {
-        res.status(400).json({message: err.message});
-    });
-
-});
 
 //get all points of interests
 router.get('/getAllSites', function (req, res){
@@ -59,7 +43,7 @@ router.get('/getAllSites', function (req, res){
 //get a specific site
 router.get('/getSite/:PointName', function (req, res, next){
 
-    DButilsAzure.execQuery(`SELECT * FROM dbo.Points_of_interests WHERE PointName = '` + req.params.PointName + "'")
+    DButilsAzure.execQuery(`SELECT * FROM dbo.Points_of_interests JOIN dbo.Users_reviews ON dbo.Points_of_interests.PointName = dbo.Users_reviews.PointName WHERE dbo.Points_of_interests.PointName = '` + req.params.PointName + "'")
     .then((response, err) => {
         if(err)
             res.status(400).json({message: err.message});
@@ -120,4 +104,6 @@ router.get('/getPointsOfInterestsByCategory/:Category', function (req, res){
 
 });
 
+
+ 
 module.exports = router;
