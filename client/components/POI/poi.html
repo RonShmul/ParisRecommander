@@ -1,6 +1,11 @@
-<p ng-repeat="(id , city) in poiCtrl.cities">
-           City name:  <span ng-bind="city.name"></span> <br>
-           City state: <span ng-bind="city.state"></span>
-           <br> <img ng-style="{'height': '100px'}" ng-src="{{city.image}}">
-
-        </p>
+<div class="container">
+        <input type="text" ng-model="search" />
+        <select ng-model="cat">
+                <option></option>
+                <option ng-repeat="category in categories">{{category.Category}}</option>
+        </select>
+        <div ng-repeat="site in sites | filter: {PointName: search, Category: cat}">
+            {{site.PointName}} <br>
+        <img style="width: 50%" ng-src="{{site.Image}}" />
+ </div>
+</div>

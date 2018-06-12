@@ -1,10 +1,50 @@
-<h1> Hi </h1>
-<h2>This is the about page</h2>
 
 <div>
-    <p>Click the button to run a function:</p>
-    <button ng-click="myFunc()">OK</button>
-    <p>The button has been clicked {{count}} times.</p>
-    
 
+<div class="w3-container">
+  <h2>Slideshow Indicators</h2>
+  <p>An example of using buttons to indicate how many slides there are in the slideshow, and which slide the user is currently viewing.</p>
+</div>
+
+<div class="w3-content w3-display-container" style="max-width:800px">
+  <img class="mySlides" src="https://www.telegraph.co.uk/content/dam/video_previews/v/2/v2exl2nje6lsczqgxklf2mh1qjkhmfu-xlarge.jpg" style="width:100%">
+  <img class="mySlides" src="https://en.parisinfo.com/var/otcp/sites/images/node_43/node_51/node_233/mont-saint-michel-%7C-740x278-%7C-%C2%A9-dr/15868184-2-fre-FR/Mont-Saint-Michel-%7C-740x278-%7C-%C2%A9-DR.jpg" style="width:100%">
+  <img class="mySlides" src="http://www.theparisreview.org/blog/wp-content/uploads/2018/01/shutterstockrf_139821658.jpg" style="width:100%">
+  <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle" style="width:100%">
+    <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
+    <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
+    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(1)"></span>
+    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"></span>
+    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"></span>
+  </div>
+</div>
+
+<script>
+var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function currentDiv(n) {
+  showDivs(slideIndex = n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  if (n > x.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+     dots[i].className = dots[i].className.replace(" w3-white", "");
+  }
+  x[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " w3-white";
+}
+</script>
 </div>
