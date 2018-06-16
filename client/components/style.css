@@ -1,11 +1,70 @@
-.section {
-	width: 100%;
-	min-height: 100vh;
-	background-color: white;
-    margin: 0;
-    position: relative;
-    display: block;
+body {
+    font-family: Montserrat, "Open Sans", Helvetica, Arial, sans-serif;
 }
+
+/*home*/
+.home-section {
+    display: block;
+    width: 100%;
+    height: 85vh;
+    background: url(https://www.telegraph.co.uk/content/dam/video_previews/v/2/v2exl2nje6lsczqgxklf2mh1qjkhmfu-xlarge.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+}
+
+/*poi*/
+.section {
+    width: 50%;
+    height: 80vh;
+	background-color: white;
+    display: block;
+    margin: auto;
+}
+
+.poi-title {
+    color: grey;
+    font-family: 'Tajawal', sans-serif;
+
+}
+div.hr-line {
+    position: relative;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    border-bottom: 1px solid #7A7A7A;
+}
+#searchbox{
+    border:1px solid #d1d1d1;
+    font: 12px Arial, Helvetica, Sans-serif;
+    color:#bebebe;
+    width:150px;
+    padding:6px 15px 6px 35px;
+    border-radius:5px;
+    box-shadow:0 1px 3px rgba(51, 51, 51, 0.082) inset;
+    -webkit-transition: all 0.7s ease 0s;
+}
+
+#searchbox:focus{
+    width:200px;
+    outline:0;
+}
+select {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color:#bebebe;
+    font: bold 12px Arial, Helvetica, Sans-serif;
+    width:150px;
+    border:1px solid #d1d1d1;
+    border-radius: 5px;
+    box-shadow:0 1px 3px rgba(51, 51, 51, 0.082) inset;
+  }
+
+
+/*home*/
 .paris-title {
     width: 90%;
     text-align: center;
@@ -116,49 +175,4 @@ img {
 /* On smaller screens, decrease text size */
 @media only screen and (max-width: 300px) {
     .prev, .next,.text {font-size: 11px}
-}
-h3.answer {
-    color: white;
-    font-size: 20px;
-}
-.answer {
-    background: #1ab394;
-    padding:50px;
-    font-family:sans-serif;
-}
-
-.answer h3 {
-    color:#fff;
-}
-
-li:hover:before {
-    color:#fff;
-}
-
-li {
-    color:#fff;
-    list-style:circle;
-    padding-left:50px;
-    line-height: 2;
-}
-
-li:hover:before {
-    color:#fff;
-}
-
-.answer h2 {
-    color: white;
-    font-family: "Montserrat", sans-serif;
-}
-
-.answer p {
-    color: white;
-    font-family: "Montserrat", sans-serif;
-}
-.qrcode_image {
-    width: 300px;
-    height: auto;
-    position: relative;
-    display: block;
-
 }

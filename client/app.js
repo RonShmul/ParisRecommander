@@ -7,11 +7,12 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
 
     let serverUrl = 'http://localhost:3000/';
     $routeProvider.when('/', {
-        template: '<h1>This is the default route</h1>'
+        templateUrl: 'components/Home/home.html',
+        controller : 'homeController'
     })
         .when('/about', {
             templateUrl: 'components/About/about.html',
-            controller : 'aboutController as abtCtrl'
+            controller : 'aboutController'
         })
         .when('/poi', {
             templateUrl: 'components/POI/poi.html',

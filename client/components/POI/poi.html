@@ -1,11 +1,12 @@
 <div class="container">
-        <input type="text" ng-model="search" />
-        <select ng-model="cat">
+        <input id="searchbox" type="text" ng-model="search" placeholder="Search..."/>
+        Choose Category: <select ng-model="cat">
                 <option></option>
-                <option ng-repeat="category in categories">{{category.Category}}</option>
+                 <option ng-repeat="category in categories">{{category.Category}}</option>
         </select>
-        <div ng-repeat="site in sites | filter: {PointName: search, Category: cat}">
-            {{site.PointName}} <br>
-        <img style="width: 50%" ng-src="{{site.Image}}" />
- </div>
+        <div class="section" ng-repeat="site in sites | filter: {PointName: search, Category: cat}">
+            <h2 class="poi-title">{{site.PointName}}</h2> 
+        <img ng-src="{{site.Image}}" />
+        <div class="hr-line"></div>
+        </div>
 </div>
