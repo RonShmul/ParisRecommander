@@ -9,5 +9,5 @@ angular.module('citiesApp')
             $scope.categories = response.data.Categories;
         },function(response){
             $scope.categories = "Something went wrong";
-                        })
+        })
  }]);

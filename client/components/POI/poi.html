@@ -7,6 +7,5 @@
         <div class="section" ng-repeat="site in sites | filter: {PointName: search, Category: cat}">
             <h2 class="poi-title">{{site.PointName}}</h2> 
         <img ng-src="{{site.Image}}" />
-        <div class="hr-line"></div>
         </div>
 </div>

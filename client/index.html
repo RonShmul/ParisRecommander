@@ -5,16 +5,24 @@
     <title>Travel in Paris</title>  
     <link rel="stylesheet" type="text/css" href="components/style.css">  
     <link href="https://fonts.googleapis.com/css?family=Tajawal" rel="stylesheet"> 
+
 </head>
-<body>            
-    <div>
+<body ng-controller="myCtrl">            
         <div>
             <ul>
+                <li><a ng-model="user.username">Hello {{user.username}}</a></li>
                 <li><a class="" href="#/">Home</a></li>
                 <li><a href="#/about">About</a></li>
-                <li><a href="#/poi">POI</a></li>
+                <li><a href="#/poi">Points of interest</a></li>
+                <li><a href="#/register">Register</a></li>
+                <span id="login-form">
+                    <li><a>Username: </a></li>
+                    <li><a><input type="text" name="username" placeholder="enter username.."></a></li>
+                    <li><a>Password: </a></li>
+                    <li><a><input type="text" name="password" placeholder="enter password.."></a></li>
+                    <li><a><input type="submit" name="sign-in"></a></li>
+                </span>
             </ul>
-        </div>       
         <div ng-view></div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
@@ -23,6 +31,9 @@
     <script src="myCtrl.js" ></script>
     <script src="components/About/aboutController.js" ></script>
     <script src="components/POI/poiCtrl.js" ></script>
+    <script src="components/Home/homeController.js" ></script>
+    <script src="components/Home/regctrl.js" ></script>
+
 
 </body>
 </html>   

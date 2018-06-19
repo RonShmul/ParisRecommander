@@ -28,5 +28,16 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
                 }
         }
         })
+        .when('/register',{
+            templateUrl:'components/Home/register.html',
+            controller: 'regCtrl'
+        })
         .otherwise({ redirectTo: '/' });
+}]);
+app.Service('setToken',['$http', function($http){
+    let token = ""
+    this.set = function(t){
+        token = t;
+        $http.defaults.headers.common['x-access-token'] = t;
+    }
 }]);

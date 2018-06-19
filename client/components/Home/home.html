@@ -1,3 +1,12 @@
 <div class="home-section">
+    <div class="home-background home-part">
         <h1 class="home-title">Welcome To Paris</h1>
+    </div>
+    <div class="explore home-part">
+        <h2>Explore: </h2>
+        <div class="ex-poi" ng-repeat="site in sites">
+            <h2>{{site.PointName}}</h2>
+            <img ng-src="{{site.Image}}" />
+        </div>
+    </div>
 </div>
