@@ -34,7 +34,9 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
         })
         .otherwise({ redirectTo: '/' });
 }]);
-app.Service('setToken',['$http', function($http){
+
+
+app.service('setToken',['$http', function($http){
     let token = ""
     this.set = function(t){
         token = t;

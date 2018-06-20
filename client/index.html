@@ -10,11 +10,13 @@
 <body ng-controller="myCtrl">            
         <div>
             <ul>
-                <li><a ng-model="user.username">Hello {{user.username}}</a></li>
-                <li><a class="" href="#/">Home</a></li>
-                <li><a href="#/about">About</a></li>
-                <li><a href="#/poi">Points of interest</a></li>
-                <li><a href="#/register">Register</a></li>
+                <span id="menu">
+                    <li><a ng-model="user.username">Hello {{User.Username}}</a></li>
+                    <li><a class="" href="#/">Home</a></li>
+                    <li><a href="#/about">About</a></li>
+                    <li><a href="#/poi">Points of interest</a></li>
+                    <li><a href="#/register">Register</a></li>
+                </span>
                 <span id="login-form">
                     <li><a>Username: </a></li>
                     <li><a><input type="text" name="username" placeholder="enter username.."></a></li>

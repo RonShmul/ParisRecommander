@@ -133,6 +133,12 @@ li a {
     float: right;
 }
 
+#menu {
+    float: left;
+    vertical-align: middle;
+    text-align: center;
+}
+
             
 /* Slideshow container */
 .mySlides {display: none}

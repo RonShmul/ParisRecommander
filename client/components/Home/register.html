@@ -1,22 +1,28 @@
 
-<form >
+<form name="regForm" ng-controller="regCtrl" ng-submit="submit()" novalidate>
     <h1 style="color: #5086e4">Register</h1>
     <hr>
 
     <label for="firstName"><b>First Name: </b></label>
-    <input type="text" placeholder="Enter First Name" name="fName" required>
-
+    <input type="text" ng-model="User.FirstName" placeholder="Enter First Name" name="fName" required>
+    <div ng-show="regForm.fName.$error.minlength"><small>Enter a valid name</small></div> 
     <label for="lastName"><b>Last Name</b></label>
-    <input type="text" placeholder="Enter Last Name" name="lastName" required>
+    <input type="text" ng-model="User.LastName" placeholder="Enter Last Name" name="lastName" required>
     
+    <label for="username"><b>Username</b></label>
+    <input type="text" ng-model="User.Username" placeholder="Enter Last Name" name="Username" required>
+
     <label for="Email"><b>Email</b></label>
-    <input type="email" placeholder="Enter Email" name="Email" required>
+    <input type="email" ng-model="User.Email" placeholder="Enter Email" name="Email" required>
     
+    <label for="password"><b>Password</b></label>
+    <input type="password" ng-model="User.Password" placeholder="Enter Password" name="password" required>
+
     <label for="City"><b>City</b></label>
-    <input type="text" placeholder="Insert City" name="City" required>
+    <input type="text" ng-model="User.City" placeholder="Insert City" name="City" required>
 
     <label for="Country"><b>Country</b></label>
-    <select id="country" name="country">
+    <select id="country" ng-model="User.Country" name="country">
       <option value="australia">Australia</option>
       <option value="canada">Canada</option>
       <option value="usa">USA</option>
@@ -24,8 +30,16 @@
 
     <label for="Categories"><b>Categories</b></label>
     <input type="text" placeholder="Choose Categories" name="Categories" required>
+    <div id="sec-ans">
+            <h3>Please fill answers for the folowing questions: </h3>
+            <label for="security_answer1">What was the name of your first pet?</label>
+            <input type="text" placeholder="Your answer.." ng-model="User.SecurityAnswer1" name="SecurityAnswer1" required>
+    
+            <label for="security_answer2">What is the name of your high-school?</label>
+            <input type="text" placeholder="Your answer.." ng-model="User.SecurityAnswer2" name="SecurityAnswer2" required>
+        </div>
     <input type="submit" value="Sign Up">
-  
+    
   <div class="container signin">
     <p>Already have an account? <a href="#">Sign in</a></p>
     </div>
