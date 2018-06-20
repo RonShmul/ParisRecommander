@@ -3,6 +3,14 @@ body {
     background-color: #f3f3f3; 
 }
 
+.pages {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin: 0;
+}
+
+
 /*home*/
 .home-background {
     background: url(https://www.telegraph.co.uk/content/dam/video_previews/v/2/v2exl2nje6lsczqgxklf2mh1qjkhmfu-xlarge.jpg) no-repeat center center fixed; 
@@ -53,15 +61,9 @@ body {
     font-family: 'Tajawal', sans-serif;
 
 }
-div.hr-line {
-    position: relative;
-    display: inline-block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    border-bottom: 1px solid #7A7A7A;
-}
+
 #searchbox{
+    background-color: white;
     border:1px solid #d1d1d1;
     font: 12px Arial, Helvetica, Sans-serif;
     color:#bebebe;
@@ -103,7 +105,11 @@ select {
 /*index*/
 
 ul {
-    position: relative;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 30;
     display: block;
     list-style-type: none;
     margin: 0;
@@ -113,7 +119,6 @@ ul {
     box-shadow: 0 2px 4px rgba(0,0,0,.1)!important;
 }            
 li {
-    vertical-align: middle;
     display: inline-block;
     color: black;
 }
@@ -219,7 +224,23 @@ img {
 }
 
 /*register form*/
-input[type=text], input[type=email]{
+.register-form {
+    display: block;
+    position: relative;
+    z-index: 1;
+    background: #FFFFFF;
+    margin: 50px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.register-form h1 {
+    text-align: center;
+}
+
+input[type=text], input[type=email], input[type=password] {
+    background: #f2f2f2;
+    box-sizing: border-box;
     width: 98%;
     padding: 12px 20px;
     margin: 1%;
@@ -239,4 +260,9 @@ input[type=submit] {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.validation-error {
+    color: red;
+    padding: 2px 2px 4px 2px;
 }

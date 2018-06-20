@@ -9,15 +9,17 @@
 </head>
 <body ng-controller="myCtrl">            
         <div>
+            <div style="display: block">
             <ul>
                 <span id="menu">
-                    <li><a ng-model="user.username">Hello {{User.Username}}</a></li>
+                    <li><a ng-model="CurrentUsername">Hello {{CurrentUsername}}</a></li>
                     <li><a class="" href="#/">Home</a></li>
                     <li><a href="#/about">About</a></li>
                     <li><a href="#/poi">Points of interest</a></li>
-                    <li><a href="#/register">Register</a></li>
+                    <li ng-show="!isLoggedIn"><a href="#/register">Register</a></li>
+                    <li ng-show="isLoggedIn"><a>Logout</a></li>
                 </span>
-                <span id="login-form">
+                <span id="login-form" ng-show="!isLoggedIn">
                     <li><a>Username: </a></li>
                     <li><a><input type="text" name="username" placeholder="enter username.."></a></li>
                     <li><a>Password: </a></li>
@@ -25,10 +27,13 @@
                     <li><a><input type="submit" name="sign-in"></a></li>
                 </span>
             </ul>
-        <div ng-view></div>
-    </div>
+            <div style="padding: 30px; position: relative;"></div>
+            </div>
+            <div class="pages" ng-view></div>
+        </div>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>       
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>  
+    <script src="http://code.angularjs.org/1.6.9/angular.js"></script>     
     <script src="app.js" ></script>
     <script src="myCtrl.js" ></script>
     <script src="components/About/aboutController.js" ></script>
@@ -37,5 +42,5 @@
     <script src="components/Home/regctrl.js" ></script>
 
 
-</body>
+    </body>
 </html>   
