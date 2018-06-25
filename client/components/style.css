@@ -266,3 +266,10 @@ input[type=submit] {
     color: red;
     padding: 2px 2px 4px 2px;
 }
+
+/*rates*/
+.star {
+    color: rgb(223, 223, 31);
+    font-size: 20pt;
+    padding: 10px;
+}
