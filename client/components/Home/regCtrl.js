@@ -9,7 +9,7 @@ angular.module('citiesApp')
                 $http.post(serverUrl +"users/register", JSON.stringify($rootScope.User))
                 .then(function(response){
                     setToken.set(response.data.token);
-                    localStorageService.set('token', t);
+                    localStorageModel.addLocalStorage('token',response.data.token);
                     $rootScope.CurrentUsername = $rootScope.User.Username;
                     $rootScope.isLoggedIn = true;
                     $location.path( "/" );

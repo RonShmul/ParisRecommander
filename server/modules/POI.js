@@ -72,7 +72,7 @@ router.get('/getSite/:PointName', function (req, res, next){
 //get point's reviews
 router.get('/getSiteReviews/:PointName', function (req, res, next){
 
-    DButilsAzure.execQuery(`SELECT * FROM dbo.Users_Reviews WHERE dbo.Users_Reviews.PointName = '` + req.params.PointName + "'")
+    DButilsAzure.execQuery(`SELECT Review, Username FROM dbo.Users_Reviews WHERE dbo.Users_Reviews.PointName = '` + req.params.PointName + "'")
     .then((response, err) => {
         if(err)
             res.status(400).json({message: err.message});

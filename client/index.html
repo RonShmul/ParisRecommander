@@ -32,15 +32,17 @@
                     <li><a><input type="submit" name="sign-in" ng-click="login()"></a></li>
                 </span>
             </ul>
-            <div style="padding: 30px; position: relative;"></div>
+            <div style="padding-top: 5%; position: relative;"></div>
             </div>
             <div class="pages" ng-view></div>
         </div>
-       
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="../node_modules/angular-local-storage/dist/angular-local-storage.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>  
-    <script src="http://code.angularjs.org/1.6.9/angular.js"></script>     
     <script src="app.js" ></script>
+    <script src="localStorageModel.js" ></script>
     <script src="myCtrl.js" ></script>
     <script src="components/About/aboutController.js" ></script>
     <script src="components/POI/poiCtrl.js" ></script>

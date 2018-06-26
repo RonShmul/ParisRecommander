@@ -4,7 +4,7 @@
                 <option></option>
                  <option ng-repeat="category in categories">{{category.Category}}</option>
         </select>
-        <div class="section"  type="button" ng-repeat="site in sites | filter: {PointName: search, Category: cat}" data-toggle="modal" data-target="#poi-modal" data-whatever="site.PointName">
+        <div class="section" ng-repeat="site in sites | filter: {PointName: search, Category: cat}" data-toggle="modal" data-target="#poi-modal" >
                 <div ng-click="getPoi(site.PointName)"> 
                         <h2 class="poi-title">{{site.PointName}}</h2> 
                         <img ng-src="{{site.Image}}" />
@@ -12,7 +12,7 @@
         </div>
 </div>
 
- <!--+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+ <!--++++++++++++++++++++++++++++++++ modal ++++++++++++++++++++++++++++++++++++++++++++++++++++-->
  
  <div class="modal fade" id="poi-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
    <div class="modal-dialog" role="document">
@@ -27,6 +27,9 @@
          <div>Description: {{currentPoi.Description}} </div>
          <img width="100px" ng-src="{{currentPoi.Image}}" />
          <span ng-repeat="x in [].constructor(currentPoi.Rate) track by $index" class="star">&#9733;</span>
+                <div class="reviews" ng-repeat="review in currentPoi.Reviews">
+                        <span class="user-review"><img style="width: 30px" src="http://romanroadbowneighbourhoodplan.org/wp-content/uploads/2016/02/user77.png"/>{{review.Username}}</span><span class="body-review"> {{review.Review}}</span>
+                </div>
        </div>
        <div class="modal-footer">
         <div>Number of viewers: {{currentPoi.numberOfViewers}}</div>

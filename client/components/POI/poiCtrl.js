@@ -14,9 +14,16 @@ $scope.getPoi = function(poiName) {
     $http.get(serverUrl +"poi/getSite/" + poiName)
     .then(function(response){
         $scope.currentPoi = response.data.Points_of_interests[0];
+        $http.get(serverUrl +"poi/getSiteReviews/" + poiName)
+        .then(function(response){
+            $scope.currentPoi.Reviews = response.data.reviews;
+         },function(response){
+             $scope.currentPoi.Reviews = [];
+        })
      },function(response){
-         $scope.categories = "Something went wrong";
+         $scope.currentPoi = null;
     })
+   
 }
 
 }]);
