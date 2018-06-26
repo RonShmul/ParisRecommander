@@ -112,46 +112,41 @@ select {
 }
 
 /*index*/
-ul {
+#menu {
     width: 100%;
     position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
     z-index: 30;
     display: block;
-    list-style-type: none;
-    margin: 0;
-    padding: 10px;
+    margin: auto;
     overflow: hidden; 
     background-color: white;
     box-shadow: 0 2px 4px rgba(0,0,0,.1)!important;
+    height: 9vh;
 }            
-li {
+
+.navLink {
+    padding-top: 2vh;
+    text-align: center;
     display: inline-block;
-    color: black;
-}
-
-
-li a {
-    padding: 10px;
     vertical-align: middle;
+    width: 15%;
     color: black;
     text-align: center;
-    padding: 16px 16px 50% 16px;
-    text-decoration: none;
-    margin: 0;
+  }
 
+.navLink a {
+    text-decoration: none;
 }
 
-li a:hover {
+#menu a:hover {
     text-decoration: none;
     color: black;
 }
 
 #login-form {
     z-index: 25;
-    top:5%;
+    top:10vh;
+    right: 1%;
     position: fixed;
     float: right;   
     background-color: white;

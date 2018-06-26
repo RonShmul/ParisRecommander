@@ -1,5 +1,5 @@
 angular.module('citiesApp')
- .controller('myCtrl', ['$location','setToken', '$http','$scope', '$rootScope','localStorageModel', function($location,setToken, $http, $scope, $rootScope,localStorageModel) {
+ .controller('myCtrl', ['$window', '$location','setToken', '$http','$scope', '$rootScope','localStorageModel', function($window, $location,setToken, $http, $scope, $rootScope,localStorageModel) {
     $rootScope.isLoggedIn = false;
     let serverUrl = 'http://localhost:3000/';
     $rootScope.CurrentUsername = "Guest";
@@ -12,6 +12,9 @@ angular.module('citiesApp')
     $scope.loginClicked = false;
     $scope.onClickLogin = function() {
         $scope.loginClicked = !$scope.loginClicked;
+    }
+    $scope.onClickOtherForLogin = function() {
+        $scope.loginClicked = false;
     }
     $scope.login = function() {
         isValid = true;
@@ -32,4 +35,3 @@ angular.module('citiesApp')
         }
     }
 }]);
-
