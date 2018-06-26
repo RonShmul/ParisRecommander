@@ -3,7 +3,7 @@ angular.module("citiesApp")
 
         var self=this;
 
-        self.addLocalStorage = function (key, value) {
+        self.set = function (key, value) {
             var dataVal = localStorageService.get(key);
             console.log(dataVal)
             if (!dataVal)
@@ -16,12 +16,12 @@ angular.module("citiesApp")
 
 
 
-        self.getLocalStorage= function (key)
+        self.get= function (key)
         {
            return  localStorageService.get(key)
         }
 
-        self.updateLocalStorage = function (key,value)
+        self.update = function (key,value)
         {
             localStorageService.remove(key);
             localStorageService.set(key,value);

@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/bootstrap-modal-popover.js"></script>
+    
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 </head>
 <body ng-controller="myCtrl">            
@@ -23,20 +25,22 @@
                     <li><a href="#/poi">Points of interest</a></li>
                     <li ng-show="!isLoggedIn"><a href="#/register">Register</a></li>
                     <li ng-show="isLoggedIn"><a>Logout</a></li>
-                </span>
-                <span id="login-form" ng-show="!isLoggedIn">
-                    <li><a>Username: </a></li>
-                    <li><a><input type="text" name="username" placeholder="enter username.." ng-model="User.Username"></a></li>
-                    <li><a>Password: </a></li>
-                    <li><a><input type="password" name="password" placeholder="enter password.." ng-model="User.Password"></a></li>
-                    <li><a><input type="submit" name="sign-in" ng-click="login()"></a></li>
+                    <li ng-show="!isLoggedIn"><a id="login" ng-click="onClickLogin()">Login</a></li>
                 </span>
             </ul>
-            <div style="padding-top: 5%; position: relative;"></div>
+                <div id="login-form" ng-show="loginClicked">
+                        <div class="arrow"></div>
+                    <form class="form-inline" role="form">
+                        Username: <input type="text" name="username" placeholder="enter username.." ng-model="User.Username">
+                        Password: <input type="password" name="password" placeholder="enter password.." ng-model="User.Password">
+                        <input id="loginButton" type="submit" name="sign-in" ng-click="login()">
+                    </form>
+                </div>
+                <div style="padding-top: 5%; position: relative;"></div>
             </div>
             <div class="pages" ng-view></div>
         </div>
-
+       
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="../node_modules/angular-local-storage/dist/angular-local-storage.js"></script>

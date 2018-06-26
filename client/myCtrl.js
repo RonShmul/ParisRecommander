@@ -9,16 +9,20 @@ angular.module('citiesApp')
     $rootScope.User = {
         Categories: ['Museums', 'Restaurants']
     };
-
+    $scope.loginClicked = false;
+    $scope.onClickLogin = function() {
+        $scope.loginClicked = !$scope.loginClicked;
+    }
     $scope.login = function() {
         isValid = true;
         if(isValid) {
             $http.post(serverUrl +"users/login", JSON.stringify($rootScope.User))
             .then(function(response){
+                $scope.loginClicked = false;
                 setToken.set(response.data.token);
                 $rootScope.CurrentUsername = $rootScope.User.Username;
                 $rootScope.isLoggedIn = true;
-                localStorageModel.addLocalStorage('token',response.data.token);
+                localStorageModel.set('token',response.data.token);
                 $location.path( "/" );
             },function(response){
                 alert(response.data.message);
@@ -28,3 +32,4 @@ angular.module('citiesApp')
         }
     }
 }]);
+
