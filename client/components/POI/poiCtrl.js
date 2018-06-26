@@ -4,6 +4,7 @@ angular.module('citiesApp')
     let serverUrl = 'http://localhost:3000/';
     $scope.currentPoi = null;
     $scope.sites = poi;
+    $scope.noReviews = false;
     $http.get(serverUrl +"poi/getCategories")
         .then(function(response){
             $scope.categories = response.data.Categories;
@@ -16,8 +17,10 @@ $scope.getPoi = function(poiName) {
         $scope.currentPoi = response.data.Points_of_interests[0];
         $http.get(serverUrl +"poi/getSiteReviews/" + poiName)
         .then(function(response){
+            $scope.noReviews = false;
             $scope.currentPoi.Reviews = response.data.reviews;
          },function(response){
+             $scope.noReviews=true;
              $scope.currentPoi.Reviews = [];
         })
      },function(response){

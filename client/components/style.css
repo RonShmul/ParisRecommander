@@ -132,6 +132,7 @@ select {
     width: 15%;
     color: black;
     text-align: center;
+    cursor: pointer;
   }
 
 .navLink a {
@@ -144,6 +145,7 @@ select {
 }
 
 #login-form {
+    width: 20vw;
     z-index: 25;
     top:10vh;
     right: 1%;
@@ -161,6 +163,10 @@ select {
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+}
+
+#login-form input {
+    margin: 0.5vw;
 }
 
 #login-form:after {
@@ -245,32 +251,10 @@ img {
     transition: background-color 0.6s ease;
 }
 
-.actives, .dot:hover {
+.activePic, .dot:hover {
     background-color: #717171;
 }
 
-/* Fading animation */
-.fade {
-    -webkit-animation-name: fade;
-    -webkit-animation-duration: 1.5s;
-    animation-name: fade;
-    animation-duration: 1.5s;
-}
-
-@-webkit-keyframes fade {
-    from {opacity: .4}
-    to {opacity: 1}
-}
-
-@keyframes fade {
-    from {opacity: .4}
-    to {opacity: 1}
-}
-
-/* On smaller screens, decrease text size */
-@media only screen and (max-width: 300px) {
-    .prev, .next,.text {font-size: 11px}
-}
 
 /*register form*/
 .register-form {
@@ -342,12 +326,12 @@ input[type=submit] {
   }
   .user-review {
       position: relative;
-      display: inline-block;
       color: grey;
       width: 50%;
   }
-.user-body {
+.body-review {
     position: relative;
-    display: inline-block;
-    width: 50%;
+    color: black;
+    padding-top: 1vw;
+    padding-left: 3vw; 
 }

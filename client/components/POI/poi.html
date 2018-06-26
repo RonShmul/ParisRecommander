@@ -28,9 +28,10 @@
          <img width="100px" ng-src="{{currentPoi.Image}}" />
          <span ng-repeat="x in [].constructor(currentPoi.Rate) track by $index" class="star">&#9733;</span>
          <h4 style="color:grey">Reviews:</h3>
-                <div class="reviews" ng-repeat="review in currentPoi.Reviews">
-                        <span class="user-review"><img style="width: 30px" src="http://romanroadbowneighbourhoodplan.org/wp-content/uploads/2016/02/user77.png"/>{{review.Username}}</span><span class="body-review"> {{review.Review}}</span>
+                <div ng-show="!noReviews" class="reviews" ng-repeat="review in currentPoi.Reviews">
+                        <div class="user-review"><img style="width: 30px" src="http://romanroadbowneighbourhoodplan.org/wp-content/uploads/2016/02/user77.png"/>{{review.Username}}</div><div class="body-review"> {{review.Review}}</div>
                 </div>
+                <div class="reviews" ng-show="noReviews">There are no reviews for this point of interest yet..</div>
        </div>
        <div class="modal-footer">
         <div>Number of viewers: {{currentPoi.numberOfViewers}}</div>
