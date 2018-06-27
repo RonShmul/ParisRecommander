@@ -1,8 +1,11 @@
 angular.module('citiesApp')
 .controller('aboutController', ['$scope', function($scope) {
+    $("#goUpArrow").hide();
 
   showSlides(1);
   }]);
+
+  
   var slideIndex = 1;
   function plusSlides(n) {
       showSlides(slideIndex += n);
@@ -22,8 +25,8 @@ angular.module('citiesApp')
           slides[i].style.display = "none";
       }
       for (i = 0; i < dots.length; i++) {
-          dots[i].className = dots[i].className.replace("actives", "");
+          dots[i].className = dots[i].className.replace("activePic", "");
       }
       slides[slideIndex-1].style.display = "block";
-      dots[slideIndex-1].className += " actives";
+      dots[slideIndex-1].className += " activePic";
   }

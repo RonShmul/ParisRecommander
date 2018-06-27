@@ -1,6 +1,7 @@
 angular.module('citiesApp')
  .controller('homeController', ['$http','$scope', function($http, $scope, poi) {
- 
+    $("#goUpArrow").hide();
+
     let serverUrl = 'http://localhost:3000/';
 
     $http.get(serverUrl +"poi/getAllSites")

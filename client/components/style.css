@@ -11,6 +11,7 @@ body {
     position: relative;
     width: 100%;
     margin: 0;
+    background-color: #f3f3f3e0; 
 }
 
 
@@ -57,11 +58,10 @@ body {
     width: 60%;
 	background-color: white;
     display: block;
-    margin: auto;
+    margin: 2vw auto 2vw auto;
     padding: 1%;
-    border-width: 1%;
+    border-width: 3%;
     cursor: pointer;
-    
 }
 
 .poi-title {
@@ -334,4 +334,13 @@ input[type=submit] {
     color: black;
     padding-top: 1vw;
     padding-left: 3vw; 
+}
+
+/*scroll up arrow img*/
+#arrowUp-pic {
+    position: fixed;
+    width: 5vw;
+    bottom: 0.5vw;
+    right: 0.5vw;
+    z-index: 25;
 }
