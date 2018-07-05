@@ -23,7 +23,8 @@
                     <a class="navLink" href="#/about">About</a>
                     <a class="navLink" href="#/poi">Points of interest</a>
                     <a class="navLink" ng-show="!isLoggedIn" href="#/register">Register</a>
-                    <a class="navLink" ng-show="isLoggedIn">Logout</a>
+                    <a class="navLink" ng-show="isLoggedIn" ng-click="logout()">Logout</a>
+                    <a class="navLink" href="#/favorites" ng-show="isLoggedIn">&#9734; Favorites</a>
                     </span>
                     <a class="navLink" style="text-align: right; position: absolute; right: 3vw" ng-show="!isLoggedIn" id="login" ng-click="onClickLogin()">Login</a>
                 </div>
@@ -47,10 +48,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>  
     <script src="app.js" ></script>
     <script src="localStorageModel.js" ></script>
+    <script src="loginService.js" ></script>
     <script src="myCtrl.js" ></script>
     <script src="components/About/aboutController.js" ></script>
     <script src="components/POI/poiCtrl.js" ></script>
     <script src="components/Home/homeController.js" ></script>
+    <script src="components/Home/homeService.js" ></script>
     <script src="components/Home/regctrl.js" ></script>
     <script src="components/About/aboutController.js" ></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>      

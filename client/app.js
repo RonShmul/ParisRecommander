@@ -32,6 +32,9 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
             templateUrl:'components/Home/register.html',
             controller: 'regCtrl'
         })
+        .when('/login',{
+            templateUrl:'login.html',
+        })
         .otherwise({ redirectTo: '/' });
 }]);
 

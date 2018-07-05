@@ -1,6 +1,7 @@
 angular.module('citiesApp')
  .controller('poiCtrl', ['$http','$scope', 'poi', function($http, $scope, poi) {
- 
+    $("#goUpArrow").hide();
+
     let serverUrl = 'http://localhost:3000/';
     $scope.currentPoi = null;
     $scope.sites = poi;

@@ -131,7 +131,7 @@ router.use('/auth', function(req, res, next) {
     if(token){
         jwt.verify(token,superSecret,function(err,decoded){
             if(err){
-                return res.json({success: false, message:'Failed to authenticate token.='});
+                return res.status(400).json({success: false, message:'Failed to authenticate token.='});
             }else{
                 var decoded=jwt.decode(token, {complete:true});
                 req.Username=decoded.payload.Username;
@@ -141,15 +141,15 @@ router.use('/auth', function(req, res, next) {
     }
 });
 
-//get 2 popular points of interests of the user's chosen categories
-router.post('/auth/getUserTopPointsOfInterests', function (req, res){
+//get user's chosen categories
+router.post('/auth/getUserCategories', function (req, res){
    
-    DButilsAzure.execQuery(`SELECT TOP (2) poi.* FROM Points_of_interests as poi INNER JOIN (select Category FROM Users_Categories WHERE Username = '`+req.Username+`') as uc ON poi.Category = uc.Category order by Rate desc`)
+    DButilsAzure.execQuery(`SELECT * FROM Users_Categories WHERE Username = '`+req.Username+`'`)
     .then((response, err) => {
         if(err)
             res.status(400).json({message: err.message});
         else{
-            res.status(200).json({TopPointsByCategory: response});
+            res.status(200).json({Categories: response});
             }
     })
     .catch(function(err) {

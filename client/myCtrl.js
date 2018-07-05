@@ -1,12 +1,10 @@
 angular.module('citiesApp')
- .controller('myCtrl', ['$window', '$location','setToken', '$http','$scope', '$rootScope','localStorageModel', function($window, $location,setToken, $http, $scope, $rootScope,localStorageModel) {
+ .controller('myCtrl', ['loginService', '$window', '$location','setToken', '$http','$scope', '$rootScope','localStorageModel', function(loginService, $window, $location,setToken, $http, $scope, $rootScope,localStorageModel) {
     /*variables*/
     $rootScope.isLoggedIn = false;
     let serverUrl = 'http://localhost:3000/';
     $rootScope.CurrentUsername = "Guest";
-    $rootScope.defaultUser = {
-        Username: "Guest"
-    };
+    loginService.setUserFromToken(false);
     $rootScope.User = {
         Categories: ['Museums', 'Restaurants']
     };
@@ -14,31 +12,24 @@ angular.module('citiesApp')
 
     //check if login button was clicked
     $scope.onClickLogin = function() {
-        $scope.loginClicked = !$scope.loginClicked;
+        $rootScope.loginClicked = !$rootScope.loginClicked;
     }
     //check if other parts of the windows that is not login was pressed (to hide the login window)
     $scope.onClickOtherForLogin = function() {
-        $scope.loginClicked = false;
+        $rootScope.loginClicked = false;
     }
 
     //login handle function
     $scope.login = function() {
-        isValid = true;
-        if(isValid) {
-            $http.post(serverUrl +"users/login", JSON.stringify($rootScope.User))
-            .then(function(response){
-                $scope.loginClicked = false;
-                setToken.set(response.data.token);
-                $rootScope.CurrentUsername = $rootScope.User.Username;
-                $rootScope.isLoggedIn = true;
-                localStorageModel.set('token',response.data.token);
-                $location.path( "/" );
-            },function(response){
-                alert(response.data.message);
-            });
-        } else {
-            alert("Absolutely not..");
-        }
+        loginService.login();
+    }
+    $scope.setUserFromToken = function() {
+        loginService.setUserFromToken();
+    }
+
+    //logout function
+    $scope.logout = function() {
+        loginService.logout();
     }
 
     //scroll up function

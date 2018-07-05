@@ -120,6 +120,21 @@ router.get('/getPointsOfInterestsByCategory/:Category', function (req, res){
 
 });
 
+//get highest rated point of interests by category
+router.get('/getHighestPointByCategory/:Category', function (req, res){
 
+    DButilsAzure.execQuery(`SELECT  TOP (1) * from Points_of_interests WHERE Category ='`+ req.params.Category + "' order by Rate desc")
+    .then((response, err) => {
+        if(err)
+            res.status(400).json({message: err.message});
+        else{
+            res.status(200).json({Points_of_interests: response});
+            }
+    })
+    .catch(function(err) {
+        res.status(400).json({message: err.message});
+    });
+
+});
  
 module.exports = router;

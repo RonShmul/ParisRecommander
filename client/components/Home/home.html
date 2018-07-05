@@ -9,4 +9,11 @@
             <img ng-src="{{site.Image}}" />
         </div>
     </div>
+    <div id="popularPois-home" class="explore home-part">
+        <h2>Explore: </h2>
+        <div class="ex-poi" ng-repeat="site in twoPopularPois">
+            <h2>{{site.PointName}}</h2>
+            <img ng-src="{{site.Image}}" />
+        </div>
+    </div>
 </div>
