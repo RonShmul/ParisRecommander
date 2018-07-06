@@ -2,18 +2,28 @@
     <div class="home-background home-part">
         <h1 class="home-title">Welcome To Paris</h1>
     </div>
-    <div id="explore-home" class="explore home-part">
+    <div ng-show="!isLoggedIn" id="explore-home" class="explore home-part">
         <h2>Explore: </h2>
-        <div class="ex-poi" ng-repeat="site in sites">
-            <h2>{{site.PointName}}</h2>
+        <div class="ex-poi" ng-repeat="site in sites" data-toggle="modal" data-target="#poi-modal">
+            <h4>{{site.PointName}}</h4>
             <img ng-src="{{site.Image}}" />
         </div>
     </div>
-    <div id="popularPois-home" class="explore home-part">
-        <h2>Explore: </h2>
-        <div class="ex-poi" ng-repeat="site in twoPopularPois">
-            <h2>{{site.PointName}}</h2>
-            <img ng-src="{{site.Image}}" />
+    <div ng-show="isLoggedIn" id="user-home" class="home-part">
+        <div class="user-home-parts">
+            <h2>Explore: </h2>
+            <div class="user-home-part-item" ng-repeat="site in points" data-toggle="modal" data-target="#poi-modal">
+                <div ng-click="getPoi(site.PointName)"><h4>{{site.PointName}}</h4>
+                <img ng-src="{{site.Image}}" /></div>
+            </div>
         </div>
+        <div class="user-home-parts">
+            <h2>Last Saved By You: </h2>
+            <div class="user-home-part-item" ng-repeat="site in lastSaved" data-toggle="modal" data-target="#poi-modal">
+                <div  ng-click="getPoi(site.PointName)"><h4>{{site.PointName}}</h4>
+                <img ng-src="{{site.Image}}" /></div>
+            </div>
+        </div>
+    </div>
     </div>
 </div>

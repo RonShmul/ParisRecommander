@@ -249,7 +249,7 @@ router.delete('/auth/DeleteFromFavorites', function (req, res, next){
 
 //last two points that saved in the favorites
 router.post('/auth/LastSaved', function (req, res, next){
-    DButilsAzure.execQuery(`SELECT TOP (2) * FROM Users_Favorites WHERE Username = '`+ req.Username + `' order by SavedIndex desc`)
+    DButilsAzure.execQuery(`SELECT TOP (2) * FROM Users_Favorites as uf JOIN Points_of_interests as poi ON uf.PointName = poi.PointName AND Username = '`+ req.Username + `' order by SavedIndex desc`)
     .then((response, err) =>{
         if(err)
             res.status(400).json({message: err.message});

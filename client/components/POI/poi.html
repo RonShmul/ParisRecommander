@@ -12,31 +12,4 @@
         </div>
 </div>
 
- <!--++++++++++++++++++++++++++++++++ modal ++++++++++++++++++++++++++++++++++++++++++++++++++++-->
  
- <div class="modal fade" id="poi-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-   <div class="modal-dialog modal-lg" role="document">
-     <div class="modal-content">
-       <div class="modal-header">
-         <h5 class="modal-title" id="exampleModalLabel">{{currentPoi.PointName}}</h5>
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-           <span aria-hidden="true">&times;</span>
-         </button>
-       </div>
-       <div class="modal-body">
-         <div>Description: {{currentPoi.Description}} </div>
-         <img width="100px" ng-src="{{currentPoi.Image}}" />
-         <span ng-repeat="x in [].constructor(currentPoi.Rate) track by $index" class="star">&#9733;</span>
-         <h4 style="color:grey">Reviews:</h3>
-                <div ng-show="!noReviews" class="reviews" ng-repeat="review in currentPoi.Reviews">
-                        <div class="user-review"><img style="width: 30px" src="http://romanroadbowneighbourhoodplan.org/wp-content/uploads/2016/02/user77.png"/>{{review.Username}}</div><div class="body-review"> {{review.Review}}</div>
-                </div>
-                <div class="reviews" ng-show="noReviews">There are no reviews for this point of interest yet..</div>
-       </div>
-       <div class="modal-footer">
-        <div>Number of viewers: {{currentPoi.numberOfViewers}}</div>
-       </div>
-     </div>
-   </div>
- </div>
-         <!--+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->

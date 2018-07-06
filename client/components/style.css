@@ -50,9 +50,30 @@ body {
     height: 40%;
     text-align: center;
     vertical-align: text-top;
-    
 }
 
+.user-home-parts {
+    position: relative;
+    display: inline-block;
+    width: 48%;
+    margin: 0.5%;
+    padding: 0.5%;
+    text-align: center;
+    vertical-align: text-top;
+    box-shadow: rgba(0,0,0,.1) 0 3px 20px;
+    overflow: hidden;
+
+}
+.user-home-part-item {
+    position: relative;
+    display: inline-block;
+    width: 48%;
+    margin: 0.5%;
+    padding: 0.5%;
+    height: 40%;
+    text-align: center;
+    vertical-align: text-top;
+}
 /*poi*/
 .section {
     width: 60%;

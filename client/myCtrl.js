@@ -8,6 +8,8 @@ angular.module('citiesApp')
     $rootScope.User = {
         Categories: ['Museums', 'Restaurants']
     };
+    $rootScope.currentPoi = null;
+    $rootScope.noReviews = false;
     $("#goUpArrow").hide();
 
     //check if login button was clicked
@@ -56,7 +58,31 @@ angular.module('citiesApp')
         else {
             $("#goUpArrow").hide();
         }
-      },2000);     
+      },2000);
+      
+      //handle pois
+    $rootScope.getPoi = function(poiName) {
+        $http.get(serverUrl +"poi/getSite/" + poiName)
+        .then(function(response){
+            $rootScope.currentPoi = response.data.Points_of_interests[0];
+            $http.get(serverUrl +"poi/getSiteReviews/" + poiName)
+            .then(function(response){
+                $rootScope.noReviews = false;
+                $rootScope.currentPoi.Reviews = response.data.reviews;
+             },function(response){
+                 $rootScope.noReviews=true;
+                 $rootScope.currentPoi.Reviews = [];
+            })
+         },function(response){
+             $rootScope.currentPoi = null;
+        })     
+    }
+     
 
 }]);
 
+
+$('#poi-Modal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var modal = $(this)
+  })
