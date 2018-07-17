@@ -357,7 +357,7 @@ input[type=submit] {
     cursor: pointer;
   }
 
-.star-rating {
+.star-rating .heart-like {
   margin: 0;
   padding: 0;
   display: inline-block;
@@ -370,6 +370,7 @@ input[type=submit] {
     list-style-type: none;
     display: inline-block;
 }
+
 .filled {
       color: #fd0;
     }
@@ -378,7 +379,22 @@ input[type=submit] {
     color: #666;
   }
 
+/*like*/
+.heart {
+    padding: 1px;
+    color: #ddd;
+    font-size: 20px;
+    text-shadow: .05em .05em #aaa;
+    list-style-type: none;
+    display: inline-block;
+}
+.heartFill {
+    color: red;
+}
 
+.heart.heartFill {
+    color: grey;
+}
 /*reviews*/
 .reviews {
     padding: 0;
@@ -438,4 +454,25 @@ input[type=submit] {
     background-color: white;
     font-size: 30pt;
 }
- 
+
+/* favorites */
+
+.arrow-up {
+    width: 0;
+    height: 0;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    border-bottom: 10px solid black;
+}
+.arrow-down {
+    text-align: left;
+    width: 0;
+    height: 0;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    border-top: 10px solid black;
+}
+
+.in-row {
+    display: inline;
+}

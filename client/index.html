@@ -71,7 +71,16 @@
                 <div class="star-rating star" star-rating rating-value="rating"
                 data-max="5" on-rating-selected="rateFunction(rating)"></div>
               </div>
-                  
+               <!--like with heart -->
+               <div ng-controller="FavoritePoiCtrl">
+  
+                <h4  style="color:grey">like it:</h4>
+                <div ng-init="press = heart.press"></div>
+
+            <div class="heart-like heart" heart-like is-liked="press"
+             on-like-selected="likeFunction(press)"></div>
+          </div>
+          <!--reviews-->   
               <h4 style="color:grey">Reviews:</h3>
                      <div ng-show="hasReviews" class="reviews" ng-repeat="review in activePoi.Reviews">
                              <div class="user-review"><img style="width: 30px" src="http://romanroadbowneighbourhoodplan.org/wp-content/uploads/2016/02/user77.png"/>{{review.Username}}</div><div class="body-review"> {{review.Review}}</div>
@@ -98,10 +107,12 @@
     <script src="components/POI/PoiService.js" ></script>
     <script src="myCtrl.js" ></script>
     <script src="RatingCtrl.js" ></script>
+    <script src="components/POI/FavoritePoiCtrl.js" ></script>
     <script src="components/About/aboutController.js" ></script>
     <script src="components/POI/poiCtrl.js" ></script>
     <script src="components/Home/homeController.js" ></script>
     <script src="components/Home/regctrl.js" ></script>
+    <script src="components/Favorites/FavCtrl.js" ></script>
     <script src="components/About/aboutController.js" ></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>      
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>

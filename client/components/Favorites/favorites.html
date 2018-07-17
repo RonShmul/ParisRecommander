@@ -1,0 +1,24 @@
+<div>
+    <table class="table table-striped fav-table" >
+            <tr class="fav-list">
+                <th class="fav-list-item" ng-click="sortData('name')">
+                    Site Name <div class="in-row" ng-class="getSortClass('name')"></div>
+                </th>
+                <th class="fav-list-item" ng-click="sortData('category')">
+                   Category <div class="in-row" ng-class="getSortClass('category')"></div>
+                </th>
+                <th class="fav-list-item" ng-click="sortData('rate')">
+                    Rate <div class="in-row" ng-class="getSortClass('rate')"></div>
+                </th>
+                <th class="fav-list-item">
+                    Remove
+                </th>
+            </tr>
+            <tr class="fav-list" ng-repeat="poi in favoriteList | orderBy:sortColumn:reverseSort">
+                <td class="fav-list-item"><div> {{ poi.PointName }}</div><div>{{ poi.Image }}</div> </td>
+                <td class="fav-list-item"> {{ poi.Category }} </td>
+                <td class="fav-list-item"> {{ poi.Rate }} </td>
+                <td><button ng-click="removePoi($index)">&#10060;</button></td>
+            </tr>
+    </table>
+</div>

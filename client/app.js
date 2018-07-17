@@ -35,6 +35,10 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
         .when('/login',{
             templateUrl:'login.html',
         })
+        .when('/favorites',{
+            templateUrl:'components/Favorites/favorites.html',
+            controller: 'FavCtrl'
+        })
         .otherwise({ redirectTo: '/' });
 }]);
 
