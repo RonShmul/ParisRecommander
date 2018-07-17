@@ -9,7 +9,6 @@ angular.module('citiesApp')
     $scope.UserInput = {}
     $scope.activePoi = null;
     $scope.hasReviews = false;
-    $rootScope.isInFav = false;
 
     $("#goUpArrow").hide();
 
@@ -35,9 +34,6 @@ angular.module('citiesApp')
         $scope.showLogin = false;
     }
 
-    $scope.setUserFromToken = function() {
-        loginService.setUserFromToken();
-    }
 
     //logout function
     $scope.logout = function() {

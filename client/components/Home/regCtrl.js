@@ -1,10 +1,11 @@
 angular.module('citiesApp')
-    .controller('regCtrl', ['$http','$scope', '$rootScope', 'setToken', '$location',
-    function($http, $scope, $rootScope, setToken, $location) {
+    .controller('regCtrl', ['localStorageModel', 'loginService', '$http','$scope', '$rootScope', 'setToken', '$location',
+    function(localStorageModel, loginService, $http, $scope, $rootScope, setToken, $location) {
         let serverUrl = 'http://localhost:3000/';
         self = this;
         
         $scope.numOfCategories=0;
+        $scope.UserInput = {};
         /**
          * All the preperation
          */
@@ -63,13 +64,14 @@ angular.module('citiesApp')
             isValid = true;
             
             if(isValid) {
-                $http.post(serverUrl +"users/register", JSON.stringify($rootScope.User))
+                $http.post(serverUrl +"users/register", JSON.stringify($scope.UserInput))
                 .then(function(response){
                     setToken.set(response.data.token);
                     localStorageModel.set('token',response.data.token);
-                    $rootScope.CurrentUsername = $rootScope.User.Username;
-                    $rootScope.isLoggedIn = true;
+                    loginService.User = $scope.UserInput;
+                    loginService.isLoggedIn = true;
                     $location.path( "/" );
+                    $scope.UserInput = {};
                 },function(response){
                     alert(response.data.message);
                 });
