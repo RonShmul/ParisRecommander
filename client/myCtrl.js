@@ -1,30 +1,40 @@
 angular.module('citiesApp')
- .controller('myCtrl', ['loginService', '$window', '$location','setToken', '$http','$scope', '$rootScope','localStorageModel', function(loginService, $window, $location,setToken, $http, $scope, $rootScope,localStorageModel) {
+ .controller('myCtrl', ['PoiService', 'loginService', '$window', '$location','setToken', '$http','$scope', '$rootScope','localStorageModel', function(PoiService, loginService, $window, $location,setToken, $http, $scope, $rootScope,localStorageModel) {
     /*variables*/
-    $rootScope.isLoggedIn = false;
     let serverUrl = 'http://localhost:3000/';
-    $rootScope.CurrentUsername = "Guest";
-    loginService.setUserFromToken(false);
-    $rootScope.User = {
-        Categories: ['Museums', 'Restaurants']
-    };
-    $rootScope.currentPoi = null;
-    $rootScope.noReviews = false;
+
+    loginService.setUserFromToken();
+    $scope.isLoggedIn = loginService.isLoggedIn;
+    $scope.User = loginService.User;
+    $scope.UserInput = {}
+    $scope.activePoi = null;
+    $scope.hasReviews = false;
+    $rootScope.isInFav = false;
+
     $("#goUpArrow").hide();
 
     //check if login button was clicked
     $scope.onClickLogin = function() {
-        $rootScope.loginClicked = !$rootScope.loginClicked;
+        $scope.showLogin = !$scope.showLogin;
     }
     //check if other parts of the windows that is not login was pressed (to hide the login window)
     $scope.onClickOtherForLogin = function() {
-        $rootScope.loginClicked = false;
+        $scope.showLogin = false;
     }
 
     //login handle function
     $scope.login = function() {
-        loginService.login();
+        loginService.login($scope.UserInput).then(function(message) {
+            if(message !== "SUCCESS") {
+                alert(message);
+                self.isLoggedIn = false;
+            } else {
+                self.isLoggedIn = true;
+            }
+        })
+        $scope.showLogin = false;
     }
+
     $scope.setUserFromToken = function() {
         loginService.setUserFromToken();
     }
@@ -32,6 +42,8 @@ angular.module('citiesApp')
     //logout function
     $scope.logout = function() {
         loginService.logout();
+        $scope.isLoggedIn = loginService.isLoggedIn;
+        $scope.User = loginService.User;
     }
 
     //scroll up function
@@ -60,27 +72,32 @@ angular.module('citiesApp')
         }
       },2000);
       
-      //handle pois
-    $rootScope.getPoi = function(poiName) {
-        $http.get(serverUrl +"poi/getSite/" + poiName)
-        .then(function(response){
-            $rootScope.currentPoi = response.data.Points_of_interests[0];
-            $http.get(serverUrl +"poi/getSiteReviews/" + poiName)
-            .then(function(response){
-                $rootScope.noReviews = false;
-                $rootScope.currentPoi.Reviews = response.data.reviews;
-             },function(response){
-                 $rootScope.noReviews=true;
-                 $rootScope.currentPoi.Reviews = [];
-            })
-         },function(response){
-             $rootScope.currentPoi = null;
-        })     
+    //set selected poiin modal
+    $scope.getPoi = function(poiName) {
+        var poi = PoiService.getPoi(poiName);
+        poi.then(function(poi) {
+            $scope.activePoi = poi;
+            $scope.hasReviews = (poi.Reviews.length != 0);
+        })
     }
      
+    $scope.$on('user:login', function(event,data) {
+        $scope.isLoggedIn = data;
+        loginService.setUserFromToken();
+        $scope.User = loginService.User;
+        });
+
+    //check if the current poi is in the logged in user's favorites
+    $scope.checkFavorites = function() {
+        
+    }
+
+    //when add/remove to/from favorites button (heart) is clicked
+    $scope.pressFavorite = function() {
+
+    }
 
 }]);
-
 
 $('#poi-Modal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal

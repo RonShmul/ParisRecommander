@@ -42,17 +42,28 @@ router.get('/getAllSites', function (req, res){
 
 //get a specific site
 router.get('/getSite/:PointName', function (req, res, next){
-
+    let poi = {};
     DButilsAzure.execQuery(`SELECT * FROM dbo.Points_of_interests WHERE dbo.Points_of_interests.PointName = '` + req.params.PointName + "'")
-    .then((response, err) => {
-        if(err)
-            res.status(400).json({message: err.message});
-        else{
+    .then(function(response) {
             req.numberOfViewers = response[0].numberOfViewers + 1;
-            res.status(200).json({Points_of_interests: response});
+            //res.status(200).json({Points_of_interests: response});
+            poi = response[0];
+            return Promise.resolve(poi);
+    }).then(function(poi){
+        return new Promise(function(resolve , reject){
+            DButilsAzure.execQuery(`SELECT Review, Username FROM dbo.Users_Reviews WHERE dbo.Users_Reviews.PointName = '` + req.params.PointName + "'")
+            .then(function(result){
+                resolve(result);
+            })
+            .catch(function(err){
+                reject(err);
+            })
+        }).then(function(Reviews){ 
+            poi['Reviews'] = Reviews;
+            res.status(200).json({Points_of_interests: poi});
             next();
-            }
-    })
+        }).catch(function(err) {poi['Reviews'] = [];})
+     })
     .catch(function(err) {
         res.status(400).json({message: err.message});
     });
@@ -86,6 +97,7 @@ router.get('/getSiteReviews/:PointName', function (req, res, next){
         res.status(400).json({message: err.message});
     });
 });
+
 //get 3 top rated points of interests
 router.get('/getTop3PointsOfInterests', function (req, res){
 

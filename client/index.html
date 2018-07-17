@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html ng-app="citiesApp">
 <head>
+    
     <title>Travel in Paris</title>  
     <link rel="stylesheet" type="text/css" href="components/style.css">  
     <link href="https://fonts.googleapis.com/css?family=Tajawal" rel="stylesheet"> 
@@ -13,12 +14,12 @@
     
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 </head>
-<body ng-controller="myCtrl">            
+<body ng-controller="myCtrl as indxCtrl">            
         <div>
             <div style="display: block">
                 <div id="menu">
                     <span ng-click="onClickOtherForLogin()">
-                    <a class="navLink" ng-model="CurrentUsername">Hello {{CurrentUsername}}</a>
+                    <a class="navLink" ng-model="User.Username">Hello {{User.Username}}</a>
                     <a class="navLink" href="#/">Home</a>
                     <a class="navLink" href="#/about">About</a>
                     <a class="navLink" href="#/poi">Points of interest</a>
@@ -28,11 +29,11 @@
                     </span>
                     <a class="navLink" style="text-align: right; position: absolute; right: 3vw" ng-show="!isLoggedIn" id="login" ng-click="onClickLogin()">Login</a>
                 </div>
-                <div id="login-form" ng-show="loginClicked" >
+                <div id="login-form" ng-show="showLogin" >
                         <div class="arrow"></div>
                     <form class="form-inline" role="form">
-                        Username: <input type="text" name="username" placeholder="enter username.." ng-model="User.Username">
-                        Password: <input type="password" name="password" placeholder="enter password.." ng-model="User.Password">
+                        Username: <input type="text" name="username" placeholder="enter username.." ng-model="UserInput.Username">
+                        Password: <input type="password" name="password" placeholder="enter password.." ng-model="UserInput.Password">
                         <input id="loginButton" type="submit" name="sign-in" ng-click="login()">
                     </form>
                 </div>
@@ -48,27 +49,43 @@
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">{{currentPoi.PointName}}</h5>
+                <h5 class="modal-title" id="exampleModalLabel">{{activePoi.PointName}}</h5>
+                <span ng-click="pressFavorite()" class="fav-star-btn save-to-fav" ng-show="!isInFav && isLoggedIn">&#9825; <span style="font-size: 12pt;">Save</span></span>
+                <span ng-click="pressFavorite()" class="fav-star-btn remove-from-fav" ng-show="isInFav && isLoggedIn">&#9825; <span style="font-size: 12pt;">Saved</span></span>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              <div>Description: {{currentPoi.Description}} </div>
-              <img width="100px" ng-src="{{currentPoi.Image}}" />
-              <span ng-repeat="x in [].constructor(currentPoi.Rate) track by $index" class="star">&#9733;</span>
+                <div desc-section>
+                    <span class="desc-section-item">Description: {{activePoi.Description}} </span>
+                    <span class="poi-section-item"><span class="poi-rate">{{activePoi.Rate}}</span></span>
+                </div>
+              <img width="100px" ng-src="{{activePoi.Image}}" />
+              <!--rate with stars-->
+              <div ng-controller="RatingCtrl">
+  
+                    <h4  style="color:grey">Rate it:</h4>
+                 <div ng-init="rating = star.rating + 1"></div>
+                
+                <div class="star-rating star" star-rating rating-value="rating"
+                data-max="5" on-rating-selected="rateFunction(rating)"></div>
+              </div>
+                  
               <h4 style="color:grey">Reviews:</h3>
-                     <div ng-show="!noReviews" class="reviews" ng-repeat="review in currentPoi.Reviews">
+                     <div ng-show="hasReviews" class="reviews" ng-repeat="review in activePoi.Reviews">
                              <div class="user-review"><img style="width: 30px" src="http://romanroadbowneighbourhoodplan.org/wp-content/uploads/2016/02/user77.png"/>{{review.Username}}</div><div class="body-review"> {{review.Review}}</div>
                      </div>
-                     <div class="reviews" ng-show="noReviews">There are no reviews for this point of interest yet..</div>
+                     <div class="reviews" ng-show="!hasReviews">There are no reviews for this point of interest yet..</div>
             </div>
             <div class="modal-footer">
-             <div>Number of viewers: {{currentPoi.numberOfViewers}}</div>
+             <div>Number of viewers: {{activePoi.numberOfViewers}}</div>
             </div>
           </div>
         </div>
       </div>
+
+
               <!--+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
        
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -78,7 +95,9 @@
     <script src="app.js" ></script>
     <script src="localStorageModel.js" ></script>
     <script src="loginService.js" ></script>
+    <script src="components/POI/PoiService.js" ></script>
     <script src="myCtrl.js" ></script>
+    <script src="RatingCtrl.js" ></script>
     <script src="components/About/aboutController.js" ></script>
     <script src="components/POI/poiCtrl.js" ></script>
     <script src="components/Home/homeController.js" ></script>

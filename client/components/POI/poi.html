@@ -6,7 +6,7 @@
         </select>
         <div class="section" ng-repeat="site in sites | filter: {PointName: search, Category: cat}" data-toggle="modal" data-target="#poi-modal" >
                 <div ng-click="getPoi(site.PointName)"> 
-                        <h2 class="poi-title">{{site.PointName}}</h2> 
+                        <h2 class="poi-title"> {{site.PointName}}</h2> 
                         <img ng-src="{{site.Image}}" />
                 </div>
         </div>

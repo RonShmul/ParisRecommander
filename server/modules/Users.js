@@ -274,7 +274,7 @@ router.post('/auth/FavoritePointsOfInterest', function (req, res, next){
     .then((response, err) =>{
         if(err)
             res.status(400).json({message: err.message});
-        else{            
+        else{
             if(response.length == 0) {
                 res.status(400).json({message: 'There is not saved points in favorites'});
             }
