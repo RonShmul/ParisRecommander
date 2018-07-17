@@ -30,7 +30,7 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
         })
         .when('/register',{
             templateUrl:'components/Home/register.html',
-            controller: 'regCtrl'
+            controller: 'regCtrl as regCtrl'
         })
         .when('/login',{
             templateUrl:'login.html',

@@ -4,47 +4,63 @@
     <hr>
 
     <label for="firstName"><b>First Name: </b></label>
-    <input type="text" ng-model="User.FirstName" placeholder="Enter First Name" name="fName" ng-minlength="3" ng-maxlength="8" required>
-    <div ng-show="regForm.fName.$error.minlength && regForm.fName.$touched" class="validation-error"><small>The name is too short</small></div>
-    <div ng-show="regForm.fName.$error.maxlength && regForm.fName.$touched" class="validation-error"><small>The name is too long</small></div>  
+    <input type="text" ng-model="User.FirstName" placeholder="Enter First Name" name="fName" required>
+    
     
     <label for="lastName"><b>Last Name</b></label>
     <input type="text" ng-model="User.LastName" placeholder="Enter Last Name" name="lastName" required>
     
     <label for="username"><b>Username</b></label>
-    <input type="text" ng-model="User.Username" placeholder="Enter Last Name" name="Username" required>
+    <input type="text" ng-pattern="/^[a-zA-Z\s]*$/" ng-model="User.Username" placeholder="Enter Last Name" name="Username" ng-minlength="3" ng-maxlength="8" required>
+    <div ng-show="regForm.Username.$error.minlength && regForm.Username.$touched" class="validation-error"><small>The name is too short</small></div>
+    <div ng-show="regForm.Username.$error.maxlength && regForm.Username.$touched" class="validation-error"><small>The name is too long</small></div>
+    <div ng-show="regForm.Username.$invalid && regForm.Username.$touched" class="validation-error"><small>Username must contain letters only</small></div>
 
     <label for="Email"><b>Email</b></label>
     <input type="email" ng-model="User.Email" placeholder="Enter Email" name="Email" required>
     <div ng-show="regForm.Email.$invalid && regForm.Email.$touched" class="validation-error"><small>Invalid email address</small></div>
     
     <label for="password"><b>Password</b></label>
-    <input type="password" ng-model="User.Password" placeholder="Enter Password" name="password" required>
-    <div ng-show="regForm.password.$invalid && regForm.password.$touched" class="validation-error"><small>Invalid password</small></div>
-
+    <input type="password" ng-pattern="/^[a-zA-Z0-9\s]*$/" ng-model="User.Password" placeholder="Enter Password" name="password" ng-minlength="5" ng-maxlength="10"  required>
+    <div ng-show="regForm.password.$error.minlength && regForm.password.$touched" class="validation-error"><small>Password is too short</small></div>
+    <div ng-show="regForm.password.$error.maxlength && regForm.password.$touched" class="validation-error"><small>Password is too long</small></div>
+    
     <label for="City"><b>City</b></label>
     <input type="text" ng-model="User.City" placeholder="Insert City" name="City" required>
+    <div ng-show="regForm.City.$touched && regForm.City.$invalid" class="validation-error"><small>Please enter a city</small></div>
+
 
     <label for="Country"><b>Country</b></label>
-    <select id="country" ng-model="User.Country" name="country">
-      <option value="australia">Australia</option>
-      <option value="canada">Canada</option>
-      <option value="usa">USA</option>
-    </select>   
+    <select id="Countries" ng-model="User.Country" name="country" ng-options="country.Name as country.Name for country in countries"></select><br><br>
+    <div ng-show="regForm.country.$touched && regForm.country.$invalid" class="validation-error"><small>please choose a country</small></div>
 
     <label for="Categories"><b>Categories</b></label>
-    <input type="text" placeholder="Choose Categories" name="Categories" required>
+    <div ng-repeat="category in categories" class="standard" flex="50">
+      <label>        
+        <input type="checkbox" name="category" ng-model="category.checked" ng-change="sumCategories(category.checked)">
+        {{ category.Category }}
+      </label>
+    </div>
+    <div ng-show="numOfCategories<2" class="validation-error"><small>You must choose at least 2 categories</small></div>
+
+
     <div id="sec-ans">
             <h3>Please fill answers for the folowing questions: </h3>
             <label for="security_answer1">What was the name of your first pet?</label>
             <input type="text" placeholder="Your answer.." ng-model="User.SecurityAnswer1" name="SecurityAnswer1" required>
-    
+            <div ng-show="regForm.SecurityAnswer1.$touched && regForm.SecurityAnswer1.$invalid" class="validation-error"><small>You have to answer..</small></div>
+
             <label for="security_answer2">What is the name of your high-school?</label>
             <input type="text" placeholder="Your answer.." ng-model="User.SecurityAnswer2" name="SecurityAnswer2" required>
+            <div ng-show="regForm.SecurityAnswer2.$touched && regForm.SecurityAnswer2.$invalid" class="validation-error"><small>You have to answer..</small></div>
         </div>
     <input type="submit" value="Sign Up">
     
   <div class="container signin">
     <p>Already have an account? <a href="#">Sign in</a></p>
     </div>
+
+
+       <!--<input type="submit" class="btn btn-primary" value="Register" ng-disabled="register.$invalid || totalSelected < 2"/>-->
+
 </form>
