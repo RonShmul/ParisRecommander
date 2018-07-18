@@ -5,7 +5,9 @@ angular.module('citiesApp')
         self = this;
         
         $scope.numOfCategories=0;
-        $scope.UserInput = {};
+        $scope.UserInput = {
+            Categories: []
+        };
         /**
          * All the preperation
          */
@@ -22,12 +24,19 @@ angular.module('citiesApp')
         getCategories();
 
         //checks how many categories were chosen
-        $scope.sumCategories=function(checked){
+        $scope.sumCategories=function(checked, category){
             if(checked){
-                $scope.numOfCategories++;        
+                $scope.numOfCategories++;
+                $scope.UserInput.Categories.push(category);        
             }            
             else{
-                $scope.numOfCategories--; 
+                $scope.numOfCategories--;
+                // for(var i = 0; i < $scope.UserInput.Categories.length) {
+                //     if($scope.UserInput.Categories[i] == category)
+                // }
+                $scope.UserInput.Categories = $scope.UserInput.Categories.filter(function(el) {
+                    return el != category;
+                });
             }
         }
 
@@ -68,6 +77,7 @@ angular.module('citiesApp')
                 .then(function(response){
                     setToken.set(response.data.token);
                     localStorageModel.set('token',response.data.token);
+                    localStorageModel.set('userCategories',$scope.UserInput.Categories);
                     loginService.User = $scope.UserInput;
                     loginService.isLoggedIn = true;
                     $location.path( "/" );

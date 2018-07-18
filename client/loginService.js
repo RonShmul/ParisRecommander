@@ -15,15 +15,16 @@ angular.module("citiesApp")
         //set Username in User from token
         self.setUserFromToken = function() {
             var dataVal = localStorageModel.get('token');
+            var categories = localStorageModel.get('userCategories');
             var token = self.jwtDecode(dataVal); //todo if expired
             if(dataVal) {
                 self.isLoggedIn = true;
                 self.User.Username = token.payload.Username;
+                self.User.Categories = categories;
             } else {
                 self.isLoggedIn = false;
                 var user = {
                     Username: "Guest",
-                    Categories: ['Museums', 'Restaurants'] // todo: delete after
                 }
                 self.User = user;
             }
@@ -37,12 +38,22 @@ angular.module("citiesApp")
                     setToken.set(response.data.token);
                     self.isLoggedIn = true;
                     localStorageModel.set('token',response.data.token);
-                    self.setUserFromToken();
-                    $rootScope.$broadcast('user:login',self.isLoggedIn);
                     $location.path( "/" );
                     return "SUCCESS";
                 },function(response){
                     return response.data.message;
+                }).then(function(message) {
+                    return $http.post(serverUrl +"users/auth/getUserCategories")
+                    .then(function(response){
+                        var categories = [];
+                        for(var i = 0; i < response.data.Categories.length; i++) {
+                            categories.push(response.data.Categories[i].Category);
+                        } 
+                        localStorageModel.set('userCategories', categories);
+                        self.setUserFromToken();
+                        $rootScope.$broadcast('user:login',self.isLoggedIn);
+                        return message;
+                    });
                 });
         }
 
@@ -63,7 +74,6 @@ angular.module("citiesApp")
             localStorageModel.deleteToken();
             var user = {
                 Username: "Guest",
-                Categories: ['Museums', 'Restaurants'] // todo: delete after
             }
             self.isLoggedIn = false;
             self.User = user

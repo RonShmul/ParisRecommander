@@ -37,7 +37,7 @@
     <label for="Categories"><b>Categories</b></label>
     <div ng-repeat="category in categories" class="standard" flex="50">
       <label>        
-        <input type="checkbox" name="category" ng-model="category.checked" ng-change="sumCategories(category.checked)">
+        <input type="checkbox" name="category" ng-model="category.checked" ng-change="sumCategories(category.checked, category.Category)">
         {{ category.Category }}
       </label>
     </div>
