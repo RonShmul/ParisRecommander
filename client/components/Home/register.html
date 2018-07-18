@@ -1,5 +1,5 @@
 
-<form class="register-form" name="regForm" ng-controller="regCtrl" ng-submit="submit()" novalidate>
+<form class="register-form" name="regForm" ng-controller="regCtrl" ng-submit="submit(regForm.$invalid)" novalidate>
     <h1 style="color: #5086e4">Register</h1>
     <hr>
 
@@ -11,10 +11,12 @@
     <input type="text" ng-model="UserInput.LastName" placeholder="Enter Last Name" name="lastName" required>
     
     <label for="username"><b>Username</b></label>
-    <input type="text" ng-pattern="/^[a-zA-Z\s]*$/" ng-model="UserInput.Username" placeholder="Enter Last Name" name="Username" ng-minlength="3" ng-maxlength="8" required>
+    <input id="Username" type="text" ng-pattern="/^[a-zA-Z\s]*$/" ng-model="UserInput.Username" placeholder="Enter Last Name" name="Username" ng-minlength="3" ng-maxlength="8" required>
+    <div ng-show="regForm.Username.$invalid && regForm.Username.$touched" class="validation-error"><small>Username must contain letters only</small></div>
     <div ng-show="regForm.Username.$error.minlength && regForm.Username.$touched" class="validation-error"><small>The name is too short</small></div>
     <div ng-show="regForm.Username.$error.maxlength && regForm.Username.$touched" class="validation-error"><small>The name is too long</small></div>
-    <div ng-show="regForm.Username.$invalid && regForm.Username.$touched" class="validation-error"><small>Username must contain letters only</small></div>
+    <h1>The validation: {{regForm.Username.$valid}}</h1>
+
 
     <label for="Email"><b>Email</b></label>
     <input type="email" ng-model="UserInput.Email" placeholder="Enter Email" name="Email" required>
