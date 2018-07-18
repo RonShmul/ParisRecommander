@@ -59,11 +59,15 @@ angular.module('citiesApp')
          * The submit
          */
 
-        $scope.submit = function() {
+        $scope.submit = function(invalid) {
             $("#goUpArrow").hide();
-            isValid = true;
+            var isValid = true;
+            var x = document.getElementById("Username"); //todo: checks only empty fields- how to check other validations
+            if(!x.checkValidity()){
+                isValid = false;
+            }            
             
-            if(isValid) {
+            if(!invalid) {
                 $http.post(serverUrl +"users/register", JSON.stringify($scope.UserInput))
                 .then(function(response){
                     setToken.set(response.data.token);
