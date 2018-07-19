@@ -7,6 +7,8 @@ angular.module('citiesApp')
     $scope.userLastPois = lastSavedPois;
     loginService.setUserFromToken();
     $scope.isLoggedIn = loginService.isLoggedIn;
+    $scope.noLast = $scope.userLastPois ?  $scope.userLastPois.length== 0: false;
+    //on  login
     $scope.$on('user:login', function(event,data) {
         $scope.isLoggedIn = data;
         loginService.setUserFromToken();
@@ -17,6 +19,8 @@ angular.module('citiesApp')
             });
             PoiService.getLastSaved().then(function(pois) {
                 $scope.userLastPois = pois;
+                $scope.noLast = $scope.userLastPois.length?  $scope.userLastPois.length== 0: false;
+                $scope.$apply();
             });
         }
     });

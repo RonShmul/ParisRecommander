@@ -59,6 +59,11 @@ angular.module("citiesApp")
                                     self.setUserFromToken();
                                     $rootScope.$broadcast('user:login',self.isLoggedIn);
                                     return message;
+                                }, function(response) {
+                                    localStorageModel.set('favoritesPois', response.data.FavoriteList);
+                                    self.setUserFromToken();
+                                    $rootScope.$broadcast('user:login',self.isLoggedIn);
+                                    return message;
                                 });
                         });
                 });

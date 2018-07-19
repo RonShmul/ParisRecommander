@@ -270,13 +270,13 @@ router.post('/auth/LastSaved', function (req, res, next){
 
 //Show favorites points of interest
 router.post('/auth/FavoritePointsOfInterest', function (req, res, next){
-    DButilsAzure.execQuery(`SELECT * FROM Users_Favorites AS UF LEFT JOIN dbo.Points_of_interests AS POIS ON UF.Username = '`+ req.Username + `' AND POIS.PointName = UF.PointName order by PriorityIndex`)
+    DButilsAzure.execQuery(`SELECT * FROM Users_Favorites AS UF JOIN dbo.Points_of_interests AS POIS ON UF.Username = '`+ req.Username + `' AND POIS.PointName = UF.PointName order by PriorityIndex`)
     .then((response, err) =>{
         if(err)
-            res.status(400).json({message: err.message});
+            res.status(400).json({FavoriteList: []});
         else{
             if(response.length == 0) {
-                res.status(400).json({message: 'There is not saved points in favorites'});
+                res.status(400).json({FavoriteList: []});
             }
             else {
                 res.status(200).json({FavoriteList: response});
@@ -284,13 +284,14 @@ router.post('/auth/FavoritePointsOfInterest', function (req, res, next){
         }
     })
     .catch(function(err) {
-        res.status(400).json({message: err.message});
+        res.status(400).json({FavoriteList: []});
     });    
 });
 
 //create favorites table from a given array of points name
 router.post('/auth/createFavoriteList', function (req, res){
-    DButilsAzure.execQuery(`DELETE FROM Users_Favorites WHERE Username='` + req.Username + "'").then((response, err) => {
+    DButilsAzure.execQuery(`DELETE FROM Users_Favorites WHERE Username='` + req.Username + "'")
+    .then((response, err) => {
         var query = `INSERT INTO Users_Favorites (Username, PointName, PriorityIndex) VALUES `;
         var i = 1
         for(; i < req.body.Points.length; i++) {
@@ -301,8 +302,10 @@ router.post('/auth/createFavoriteList', function (req, res){
         .then((response) => { 
             res.sendStatus(200);
         })
-        .catch((err)=> {res.send({FavoriteList: err})});
-    }).catch((err)=> {res.send({FavoriteList: err})});
+        .catch((err)=> {
+            res.send({FavoriteList: err})});
+    }).catch((err)=> {
+        res.send({FavoriteList: err})});
 });
 
 //Save favorites sorted by priority
