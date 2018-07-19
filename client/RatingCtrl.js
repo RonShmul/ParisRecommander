@@ -37,6 +37,7 @@ angular.module('citiesApp')
 		$http.post(serverUrl +"users/auth/addReview", Review)
 			.then(function(response){
 				// Reset clases of the form after submit.
+				PoiService.activePoi.Reviews.push($scope.userReview);
 				$scope.userReview = "";
 				$scope.form.$setPristine();
 			}, function(response) {});
