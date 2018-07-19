@@ -1,5 +1,5 @@
 angular.module("citiesApp")
-    .service('loginService', ['$rootScope','setToken', '$http', '$location', 'localStorageModel', function($rootScope, setToken, $http, $location, localStorageModel) {
+    .service('loginService', ['PoiService', '$rootScope','setToken', '$http', '$location', 'localStorageModel', function(PoiService, $rootScope, setToken, $http, $location, localStorageModel) {
         
         let serverUrl = 'http://localhost:3000/';
 
@@ -9,7 +9,6 @@ angular.module("citiesApp")
         self.isLoggedIn = false;
         self.User = {
             Username: "Guest",
-            Categories: ['Museums', 'Restaurants'] // todo: delete after
         }
 
         //set Username in User from token
@@ -21,6 +20,8 @@ angular.module("citiesApp")
                 self.isLoggedIn = true;
                 self.User.Username = token.payload.Username;
                 self.User.Categories = categories;
+                PoiService.userFavoritesList = localStorageModel.get('favoritesPois');
+
             } else {
                 self.isLoggedIn = false;
                 var user = {
@@ -44,16 +45,22 @@ angular.module("citiesApp")
                     return response.data.message;
                 }).then(function(message) {
                     return $http.post(serverUrl +"users/auth/getUserCategories")
-                    .then(function(response){
-                        var categories = [];
-                        for(var i = 0; i < response.data.Categories.length; i++) {
-                            categories.push(response.data.Categories[i].Category);
-                        } 
-                        localStorageModel.set('userCategories', categories);
-                        self.setUserFromToken();
-                        $rootScope.$broadcast('user:login',self.isLoggedIn);
-                        return message;
-                    });
+                        .then(function(response){
+                            var categories = [];
+                            for(var i = 0; i < response.data.Categories.length; i++) {
+                                categories.push(response.data.Categories[i].Category);
+                            } 
+                            localStorageModel.set('userCategories', categories);
+                            return message;
+                        }).then(function(message) {
+                            return $http.post(serverUrl +"users/auth/FavoritePointsOfInterest")
+                                .then(function(response){
+                                    localStorageModel.set('favoritesPois', response.data.FavoriteList);
+                                    self.setUserFromToken();
+                                    $rootScope.$broadcast('user:login',self.isLoggedIn);
+                                    return message;
+                                });
+                        });
                 });
         }
 
@@ -71,7 +78,8 @@ angular.module("citiesApp")
         
         //logout function will delete the token from local storage, set isLoggedIn to false and set the user to guest
         self.logout = function() {
-            localStorageModel.deleteToken();
+            localStorageModel.deleteStorage();
+
             var user = {
                 Username: "Guest",
             }

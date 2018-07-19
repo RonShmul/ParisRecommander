@@ -324,19 +324,11 @@ input[type=submit] {
 /*favorites*/
 .fav-star-btn {
     position: absolute;
-    right: 5vw;
+    right: 100px;
     z-index: 30;
-    top: 1.5vw;
+    top: 0;
     overflow: hidden;
     cursor: pointer;
-}
-
-.save-to-fav {
-    color: grey;
-}
-
-.remove-from-fav {
-    color: red;
 }
 
 .rating{
@@ -381,9 +373,8 @@ input[type=submit] {
 
 /*like*/
 .heart {
-    padding: 1px;
     color: #ddd;
-    font-size: 20px;
+    font-size: 50px;
     text-shadow: .05em .05em #aaa;
     list-style-type: none;
     display: inline-block;
@@ -463,6 +454,8 @@ input[type=submit] {
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
     border-bottom: 10px solid black;
+    margin: 5px;
+    cursor: pointer;
 }
 .arrow-down {
     text-align: left;
@@ -471,8 +464,75 @@ input[type=submit] {
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
     border-top: 10px solid black;
+    margin: 5px;
+    cursor: pointer;
+
 }
 
 .in-row {
     display: inline;
+}
+
+/*review field in modal*/
+
+.comment-form .form-review .form-row{ margin-bottom: 10px; }
+.comment-form .form-review .form-row:last-child{ margin-bottom: 0; }
+
+.comment-form .form-review .input-review{
+  background-color: #fcfcfc;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .15);
+  color: #555f77;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 5px 10px;
+  outline: none;
+  width: 100%;
+
+  -webkit-transition: 350ms box-shadow;
+  -moz-transition: 350ms box-shadow;
+  -ms-transition: 350ms box-shadow;
+  -o-transition: 350ms box-shadow;
+  transition: 350ms box-shadow;
+}
+
+.comment-form .form-review textarea.input-review{
+  height: 100px;
+  padding: 15px;
+}
+
+
+.comment-form .form-review input[type=submit]{
+  background-color: #555f77;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .15);
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+  outline: none;
+  padding: 6px 15px;
+
+  -webkit-transition: 350ms box-shadow;
+  -moz-transition: 350ms box-shadow;
+  -ms-transition: 350ms box-shadow;
+  -o-transition: 350ms box-shadow;
+  transition: 350ms box-shadow;
+}
+
+.comment-form .form-review .input-review:focus,
+.comment-form .form-review input[type=submit]:focus,
+.comment-form .form-review input[type=submit]:hover{
+  box-shadow: 0 2px 6px rgba(121, 137, 148, .55);
+}
+
+.comment-form .form-review.ng-submitted .input-review.ng-invalid,
+.comment-form .form-review .input-review.ng-dirty.ng-invalid{
+  box-shadow: 0 2px 6px rgba(212, 47, 47, .55) !important;
+}
+
+.comment-form .form-review .input-review.disabled {
+    background-color: #E8E8E8;
 }

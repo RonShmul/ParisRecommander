@@ -31,12 +31,8 @@ angular.module('citiesApp')
             }            
             else{
                 $scope.numOfCategories--;
-                // for(var i = 0; i < $scope.UserInput.Categories.length) {
-                //     if($scope.UserInput.Categories[i] == category)
-                // }
-                $scope.UserInput.Categories = $scope.UserInput.Categories.filter(function(el) {
-                    return el != category;
-                });
+                var inx = $scope.UserInput.Categories.indexOf(category);
+                $scope.UserInput.Categories.splice(indx, 1);
             }
         }
 

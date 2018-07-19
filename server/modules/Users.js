@@ -270,7 +270,7 @@ router.post('/auth/LastSaved', function (req, res, next){
 
 //Show favorites points of interest
 router.post('/auth/FavoritePointsOfInterest', function (req, res, next){
-    DButilsAzure.execQuery(`SELECT * FROM Users_Favorites WHERE Username = '`+ req.Username + `' order by PriorityIndex`)
+    DButilsAzure.execQuery(`SELECT * FROM Users_Favorites AS UF LEFT JOIN dbo.Points_of_interests AS POIS ON UF.Username = '`+ req.Username + `' AND POIS.PointName = UF.PointName order by PriorityIndex`)
     .then((response, err) =>{
         if(err)
             res.status(400).json({message: err.message});
@@ -288,6 +288,22 @@ router.post('/auth/FavoritePointsOfInterest', function (req, res, next){
     });    
 });
 
+//create favorites table from a given array of points name
+router.post('/auth/createFavoriteList', function (req, res){
+    DButilsAzure.execQuery(`DELETE FROM Users_Favorites WHERE Username='` + req.Username + "'").then((response, err) => {
+        var query = `INSERT INTO Users_Favorites (Username, PointName, PriorityIndex) VALUES `;
+        var i = 1
+        for(; i < req.body.Points.length; i++) {
+            query += ("('" + req.Username + "', '" + req.body.Points[i-1] + "', " + i + "),");
+        }
+        query += ("('" + req.Username + "', '" + req.body.Points[i-1] + "', " + i + ")");
+        DButilsAzure.execQuery(query)
+        .then((response) => { 
+            res.sendStatus(200);
+        })
+        .catch((err)=> {res.send({FavoriteList: err})});
+    }).catch((err)=> {res.send({FavoriteList: err})});
+});
 
 //Save favorites sorted by priority
 router.post('/auth/SaveFavoritesList', function (req, res, next){
@@ -382,15 +398,16 @@ router.delete("/auth/deleteReview", function(req, res){
 router.post("/auth/AddRate", function(req, res){
     let username = req.Username;
     let Poi = req.body.PointName;
-    let rate = req.body.Rate;
+    let newRate = req.body.Rate;
 
     DButilsAzure.execQuery(`SELECT * FROM Users_reviews WHERE Username = '`+ username +`' AND PointName ='`+ Poi + `'`)
     .then((response) =>{
         if(response.length == 0) {
-            return insertRate(username, Poi, rate);
+            return insertRate(username, Poi, newRate);
         }
         else {
-            return updateRate(username, Poi, rate);
+            var oldRate = response[0].Rate;
+            return updateRate(username, Poi, newRate, oldRate);
         }
     }).then(function(result) {
         res.send(result);
@@ -406,6 +423,22 @@ function insertRate(username, Poi, Rate){
         
         DButilsAzure.execQuery(`INSERT INTO Users_reviews (Username, PointName, Rate, DateReview) VALUES ('`+username+`', '`+Poi+`', `+Rate+`, GETDATE())`)
         .then(function(result){
+            DButilsAzure.execQuery(`SELECT * FROM dbo.Points_of_interests PointName ='`+ Poi + `'`)
+            .then(function(poiEntry) {
+                var sum = poiEntry[0].SumOfRates;
+                var count = poiEntry[0].NumberOfRates + 1;
+                sum = sum + Rate;
+                var updatedRate = sum/count;
+                DButilsAzure.execQuery(`UPDATE dbo.Points_of_interests SET SumOfRates = ` + sum +`AND Rate = ` + updatedRate + ` WHERE PointName ='`+ Poi + `'`)
+                .then(function(result) {
+                    res.sendStatus(200);
+                }).catch(function(err) {
+                    res.send({message: err});
+                });
+
+            }).catch(function(err) {
+                res.send({message: err});
+            });
             resolve(result);
         })
         .catch(function(err){
@@ -415,11 +448,26 @@ function insertRate(username, Poi, Rate){
 }
 
 //return promise for update Rate
-function updateRate(username, Poi, Rate){
+function updateRate(username, Poi, newRate, oldRate){
     return new Promise(function(resolve , reject){
-
-        DButilsAzure.execQuery(`UPDATE Users_reviews SET Rate = `+Rate+` WHERE PointName ='`+ Poi + `' AND Username = '`+username+`'`)
+        DButilsAzure.execQuery(`UPDATE Users_reviews SET Rate = `+newRate+` WHERE PointName ='`+ Poi + `' AND Username = '`+username+`'`)
         .then(function(result){
+            DButilsAzure.execQuery(`SELECT * FROM dbo.Points_of_interests PointName ='`+ Poi + `'`)
+            .then(function(poiEntry) {
+                var sum = poiEntry[0].SumOfRates;
+                var count = poiEntry[0].NumberOfRates;
+                sum = sum + newRate - oldRate;
+                var updatedRate = sum/count;
+                DButilsAzure.execQuery(`UPDATE dbo.Points_of_interests SET SumOfRates = ` + sum +`AND Rate = ` + updatedRate + ` WHERE PointName ='`+ Poi + `'`)
+                .then(function(result) {
+                    res.sendStatus(200);
+                }).catch(function(err) {
+                    res.send({message: err});
+                });
+
+            }).catch(function(err) {
+                res.send({message: err});
+            });
             resolve(result);
         })
         .catch(function(err){

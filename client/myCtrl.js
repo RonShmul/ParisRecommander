@@ -2,15 +2,25 @@ angular.module('citiesApp')
  .controller('myCtrl', ['PoiService', 'loginService', '$window', '$location','setToken', '$http','$scope', '$rootScope','localStorageModel', function(PoiService, loginService, $window, $location,setToken, $http, $scope, $rootScope,localStorageModel) {
     /*variables*/
     let serverUrl = 'http://localhost:3000/';
-
+    var PoiService = PoiService;
     loginService.setUserFromToken();
     $scope.isLoggedIn = loginService.isLoggedIn;
     $scope.User = loginService.User;
     $scope.UserInput = {}
     $scope.activePoi = null;
     $scope.hasReviews = false;
-
     $("#goUpArrow").hide();
+
+    $scope.$on('user:login', function(event,data) {
+        $scope.isLoggedIn = data;
+        loginService.setUserFromToken();
+        $scope.User = loginService.User;
+        if(!data) {
+            PoiService.userFavoritesList = [];
+        }
+    });
+
+    
 
     //check if login button was clicked
     $scope.onClickLogin = function() {
@@ -76,23 +86,6 @@ angular.module('citiesApp')
             $scope.hasReviews = (poi.Reviews.length != 0);
         })
     }
-     
-    $scope.$on('user:login', function(event,data) {
-        $scope.isLoggedIn = data;
-        loginService.setUserFromToken();
-        $scope.User = loginService.User;
-        });
-
-    //check if the current poi is in the logged in user's favorites
-    $scope.checkFavorites = function() {
-        
-    }
-
-    //when add/remove to/from favorites button (heart) is clicked
-    $scope.pressFavorite = function() {
-
-    }
-
 }]);
 
 $('#poi-Modal').on('show.bs.modal', function (event) {
