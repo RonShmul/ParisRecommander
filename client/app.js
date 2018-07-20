@@ -8,8 +8,29 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
     let serverUrl = 'http://localhost:3000/';
     $routeProvider.when('/', {
         templateUrl: 'components/Home/home.html',
-        controller : 'homeController'
-    })
+        controller : 'homeController',
+        resolve: {
+            exUserPois: function(localStorageModel, PoiService) {
+                if(localStorageModel.get('token')) {
+                    return PoiService.getUserExplorePois().then(function(pois) {
+                        return pois;
+                    });
+                }
+            },
+            lastSavedPois: function(localStorageModel, PoiService) {
+                if(localStorageModel.get('token')) {
+                    return PoiService.getLastSaved().then(function(pois) {
+                        return pois;
+                    });
+                }
+            },
+            exPois: function(PoiService) {
+                return PoiService.getRandomPopularPois().then(function(pois) {
+                    return pois;
+                });
+            }
+        }
+        })
         .when('/about', {
             templateUrl: 'components/About/about.html',
             controller : 'aboutController'

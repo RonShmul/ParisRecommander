@@ -1,24 +1,35 @@
 <div>
-    <table class="table table-striped fav-table" >
-            <tr class="fav-list">
-                <th class="fav-list-item" ng-click="sortData('name')">
-                    Site Name <div class="in-row" ng-class="getSortClass('name')"></div>
+    <div>
+        <h1 class="float-left" style="color: #4a8af4;display: inline">Your Favorites List:</h1>
+        <button style="display: inline; margin: 20px;" class="btn btn-success float-right" ng-click="saveFavoriteList()">Save Favorites List</button>
+        <img id="ok" style="display: none" src="https://cdn.pixabay.com/photo/2017/05/03/23/39/ok-2282499_960_720.png" />
+        <img id="notOk" style="display: none" src="https://cdn.pixabay.com/photo/2013/07/13/10/12/cross-156772_640.png" />
+
+    </div>
+    <table style="background-color: white" class="table" >
+            <tr >
+                <th ng-click="sortData('PointName')">
+                    Site Name <div class="in-row" ng-class="getSortClass('PointName')"></div>
                 </th>
-                <th class="fav-list-item" ng-click="sortData('category')">
-                   Category <div class="in-row" ng-class="getSortClass('category')"></div>
+                <th ng-click="sortData('Category')">
+                   Category <div class="in-row" ng-class="getSortClass('Category')"></div>
                 </th>
-                <th class="fav-list-item" ng-click="sortData('rate')">
-                    Rate <div class="in-row" ng-class="getSortClass('rate')"></div>
+                <th ng-click="sortData('Rate')">
+                    Rate <div class="in-row" ng-class="getSortClass('Rate')"></div>
                 </th>
-                <th class="fav-list-item">
+                <th>
+                    Sort
+                </th>
+                <th>
                     Remove
                 </th>
             </tr>
-            <tr class="fav-list" ng-repeat="poi in favoriteList | orderBy:sortColumn:reverseSort">
-                <td class="fav-list-item"><div> {{ poi.PointName }}</div><div>{{ poi.Image }}</div> </td>
-                <td class="fav-list-item"> {{ poi.Category }} </td>
-                <td class="fav-list-item"> {{ poi.Rate }} </td>
-                <td><button ng-click="removePoi($index)">&#10060;</button></td>
+            <tr ng-repeat="poi in favoritesList">
+                <td ><div ng-click="getPoi(poi.PointName)"  data-toggle="modal" data-target="#poi-modal"> {{ poi.PointName }}</div><div ng-click="getPoi(poi.PointName)"  data-toggle="modal" data-target="#poi-modal"><img style="width:200px" ng-src="{{ poi.Image }}"/></div> </td>
+                <td> {{ poi.Category }} </td>
+                <td> {{ poi.Rate }} </td>
+                <td><div class="arrow-up" ng-click="upPoi(poi.PointName)"></div><div class="arrow-down" ng-click="downPoi(poi.PointName)"></div></td>
+                <td><button style="border:none; background: transparent" ng-click="removePoiFromFav(poi.PointName)">&#10060;</button></td>
             </tr>
     </table>
 </div>

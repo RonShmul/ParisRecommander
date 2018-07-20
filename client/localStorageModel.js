@@ -26,9 +26,11 @@ angular.module("citiesApp")
             localStorageService.remove(key);
             localStorageService.set(key,value);
         }
-        self.deleteToken = function ()
+        self.deleteStorage = function ()
         {
             localStorageService.remove("token");
+            localStorageService.remove("userCategories");
+            localStorageService.remove("favoritesPois");
         }
         
 

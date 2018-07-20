@@ -25,7 +25,7 @@
                     <a class="navLink" href="#/poi">Points of interest</a>
                     <a class="navLink" ng-show="!isLoggedIn" href="#/register">Register</a>
                     <a class="navLink" ng-show="isLoggedIn" ng-click="logout()">Logout</a>
-                    <a class="navLink" href="#/favorites" ng-show="isLoggedIn">&#9734; Favorites</a>
+                    <a class="navLink" href="#/favorites" ng-show="isLoggedIn">[{{favoritesCount}}] Favorites</a>
                     </span>
                     <a class="navLink" style="text-align: right; position: absolute; right: 3vw" ng-show="!isLoggedIn" id="login" ng-click="onClickLogin()">Login</a>
                 </div>
@@ -50,45 +50,51 @@
           <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">{{activePoi.PointName}}</h5>
-                <span ng-click="pressFavorite()" class="fav-star-btn save-to-fav" ng-show="!isInFav && isLoggedIn">&#9825; <span style="font-size: 12pt;">Save</span></span>
-                <span ng-click="pressFavorite()" class="fav-star-btn remove-from-fav" ng-show="isInFav && isLoggedIn">&#9825; <span style="font-size: 12pt;">Saved</span></span>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+                <!--like with heart -->
+               <div ng-show="isLoggedIn" class="fav-star-btn" ng-controller="FavCtrl">
+                    <div class="heart-like heart" heart-like is-liked="press" on-like-selected="likeFunction(press)"></div>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div desc-section>
                     <span class="desc-section-item">Description: {{activePoi.Description}} </span>
                     <span class="poi-section-item"><span class="poi-rate">{{activePoi.Rate}}</span></span>
                 </div>
-              <img width="100px" ng-src="{{activePoi.Image}}" />
-              <!--rate with stars-->
-              <div ng-controller="RatingCtrl">
-  
-                    <h4  style="color:grey">Rate it:</h4>
-                 <div ng-init="rating = star.rating + 1"></div>
-                
-                <div class="star-rating star" star-rating rating-value="rating"
-                data-max="5" on-rating-selected="rateFunction(rating)"></div>
-              </div>
-               <!--like with heart -->
-               <div ng-controller="FavoritePoiCtrl">
-  
-                <h4  style="color:grey">like it:</h4>
-                <div ng-init="press = heart.press"></div>
+                <img width="100px" ng-src="{{activePoi.Image}}" />
 
-            <div class="heart-like heart" heart-like is-liked="press"
-             on-like-selected="likeFunction(press)"></div>
-          </div>
-          <!--reviews-->   
-              <h4 style="color:grey">Reviews:</h3>
-                     <div ng-show="hasReviews" class="reviews" ng-repeat="review in activePoi.Reviews">
-                             <div class="user-review"><img style="width: 30px" src="http://romanroadbowneighbourhoodplan.org/wp-content/uploads/2016/02/user77.png"/>{{review.Username}}</div><div class="body-review"> {{review.Review}}</div>
-                     </div>
-                     <div class="reviews" ng-show="!hasReviews">There are no reviews for this point of interest yet..</div>
+                <div ng-controller="RatingCtrl">
+                    <!--rate with stars-->
+                    <div ng-show="isLoggedIn">
+                        <h4  style="color:grey">Rate it:</h4>
+                        <div ng-init="rating = star.rating + 1"></div>
+                        <div class="star-rating star" star-rating rating-value="rating" data-max="5" on-rating-selected="rateFunction(rating)"></div>
+                    </div>
+                    <!--leave a review-->
+                    <div ng-show="isLoggedIn" class="comment-form">
+                        <form class="form-review" name="form" ng-submit="form.$valid && reviewFunction()" novalidate>
+                        <div class="form-row">
+                            <textarea class="input-review" ng-model="userReview" placeholder="Add comment..." required></textarea>
+                        </div>
+                    
+                        <div class="form-row">
+                            <input type="submit" value="Add Comment">
+                        </div>
+                        </form>
+                    </div>
+                    <!--reviews-->   
+                    <h4 style="color:grey">Reviews:</h3>
+                        <div ng-show="hasReviews" class="reviews" ng-repeat="review in activePoi.Reviews">
+                            <div class="user-review"><img style="width: 30px" src="http://romanroadbowneighbourhoodplan.org/wp-content/uploads/2016/02/user77.png"/>{{review.Username}}</div>
+                            <div class="body-review"> {{review.Review}}</div>
+                        </div>
+                        <div class="reviews" ng-show="!hasReviews">There are no reviews for this point of interest yet..</div>
+                </div>
             </div>
             <div class="modal-footer">
-             <div>Number of viewers: {{activePoi.numberOfViewers}}</div>
+                <div>Number of viewers: {{activePoi.numberOfViewers}}</div>
             </div>
           </div>
         </div>
@@ -107,7 +113,6 @@
     <script src="components/POI/PoiService.js" ></script>
     <script src="myCtrl.js" ></script>
     <script src="RatingCtrl.js" ></script>
-    <script src="components/POI/FavoritePoiCtrl.js" ></script>
     <script src="components/About/aboutController.js" ></script>
     <script src="components/POI/poiCtrl.js" ></script>
     <script src="components/Home/homeController.js" ></script>
