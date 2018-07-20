@@ -71,12 +71,13 @@ angular.module('citiesApp')
         $scope.submit = function(invalid) {
             $("#goUpArrow").hide();
             var isValid = true;
-            var x = document.getElementById("Username"); //todo: checks only empty fields- how to check other validations
-            if(!x.checkValidity()){
-                isValid = false;
-            }            
+            $scope.valid=false;
+           // var x = document.getElementById("Username"); //todo: checks only empty fields- how to check other validations
+            //if(!x.checkValidity()){
+            //    isValid = false;
+            //}            
             
-            if(!invalid) {
+            if(!invalid && $scope.numOfCategories>1) { //Todo= change for country
                 $http.post(serverUrl +"users/register", JSON.stringify($scope.UserInput))
                 .then(function(response){
                     setToken.set(response.data.token);
@@ -90,7 +91,7 @@ angular.module('citiesApp')
                     alert(response.data.message);
                 });
             } else {
-                alert("Absolutely not..");
+                $scope.valid = true;
             }
         }
 }]);

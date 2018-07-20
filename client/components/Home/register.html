@@ -15,8 +15,6 @@
     <div ng-show="regForm.Username.$invalid && regForm.Username.$touched" class="validation-error"><small>Username must contain letters only</small></div>
     <div ng-show="regForm.Username.$error.minlength && regForm.Username.$touched" class="validation-error"><small>The name is too short</small></div>
     <div ng-show="regForm.Username.$error.maxlength && regForm.Username.$touched" class="validation-error"><small>The name is too long</small></div>
-    <h1>The validation: {{regForm.Username.$valid}}</h1>
-
 
     <label for="Email"><b>Email</b></label>
     <input type="email" ng-model="UserInput.Email" placeholder="Enter Email" name="Email" required>
@@ -30,7 +28,6 @@
     <label for="City"><b>City</b></label>
     <input type="text" ng-model="UserInput.City" placeholder="Insert City" name="City" required>
     <div ng-show="regForm.City.$touched && regForm.City.$invalid" class="validation-error"><small>Please enter a city</small></div>
-
 
     <label for="Country"><b>Country</b></label>
     <select id="Countries" ng-model="UserInput.Country" name="country" ng-options="country.Name as country.Name for country in countries"></select><br><br>
@@ -56,13 +53,14 @@
             <input type="text" placeholder="Your answer.." ng-model="UserInput.SecurityAnswer2" name="SecurityAnswer2" required>
             <div ng-show="regForm.SecurityAnswer2.$touched && regForm.SecurityAnswer2.$invalid" class="validation-error"><small>You have to answer..</small></div>
         </div>
-    <input type="submit" value="Sign Up">
+        <div ng-show="valid==true" class="validation-error" style="text-align: center; font-weight: bold">One or more of the fields are incorrect</div>
+        <input type="submit" value="Sign Up">
     
   <div class="container signin">
-    <p>Already have an account? <a href="#">Sign in</a></p>
+    <!--<p>Already have an account? <a href="#">Sign in</a></p> -->
     </div>
 
 
-       <!--<input type="submit" class="btn btn-primary" value="Register" ng-disabled="register.$invalid || totalSelected < 2"/>-->
+       <!--<input type="submit"  ng-disabled="register.$invalid || numOfCategories < 2"/>  ???-->
 
 </form>
