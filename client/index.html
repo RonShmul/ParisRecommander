@@ -34,6 +34,7 @@
                     <form class="form-inline" role="form">
                         Username: <input type="text" name="username" placeholder="enter username.." ng-model="UserInput.Username">
                         Password: <input type="password" name="password" placeholder="enter password.." ng-model="UserInput.Password">
+                        <a class="navLink" ng-show="!isLoggedIn" id="recovery" ng-click="" data-toggle="modal" data-target="#recoverPasswd"><p style="white-space: nowrap;"><small>Forgot your password?</small></p></a>
                         <input id="loginButton" type="submit" name="sign-in" ng-click="login()">
                     </form>
                 </div>
@@ -42,6 +43,30 @@
             <div class="pages" style="padding-top: 10vh;" ng-view ng-click="onClickOtherForLogin()"></div>
             <div id="goUpArrow"><button ng-click="scrollUp()"><img id="arrowUp-pic" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Circle-icons-arrow-up.svg/1024px-Circle-icons-arrow-up.svg.png"/></button></div>
         </div>
+
+        <!--+++++++++++modal for forgotten password+++++++++++-->
+        <div class="modal fade" id="recoverPasswd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                <form class="form-inline" role="form" >
+                    <div class="modal-content" ng-show="stillNoPass">
+                        <h5 class="modal-title">Please answer the folowing question to get your password</h5>
+                        Username: <input type="text" name="username" ng-model="userRecover.Username">
+                        What was the name of your first pet?<input type="text" name="ques1" ng-model="userRecover.SecurityAnswer1">
+                        What is the name of your high-school?<input type="text" name="ques2" ng-model="userRecover.SecurityAnswer2">
+                        <input id="recover" type="submit" name="showPass" ng-click="showPassword()" value="Get my password">
+                    </div>
+                    <div class="modal-content" ng-show="!stillNoPass && !err">
+                        <h3 class="modal-title">Your Password Is: </h3><br>
+                        <h5 class="modal-title">{{passwd}}</h5>
+                    </div>
+                    <div class="modal-content" ng-show="err">
+                        <h3 class="modal-title" style="padding:20px">One or more of the fields are incorrect...</h3>
+                    </div>
+                </form>
+                </div>
+        </div>
+
+        <!--end of modal-->
 
         <!--++++++++++++++++++++++++++++++++ modal ++++++++++++++++++++++++++++++++++++++++++++++++++++-->
  

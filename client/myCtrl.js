@@ -10,7 +10,10 @@ angular.module('citiesApp')
     $scope.activePoi = null;
     $scope.hasReviews = false;
     $("#goUpArrow").hide();
-
+    $scope.userRecover={};
+    $scope.stillNoPass=true;
+    $scope.err=false;
+   
     $scope.$on('user:login', function(event,data) {
         $scope.isLoggedIn = data;
         loginService.setUserFromToken();
@@ -20,6 +23,24 @@ angular.module('citiesApp')
         }
     });
 
+    $scope.showPassword= function(){
+       $http.post(serverUrl +"users/restorePassword", JSON.stringify($scope.userRecover))
+       .then(function(response){
+            $scope.passwd=response.data.Password;            
+       },function(response){
+        $scope.err=true;
+        return response.data.message;
+       }
+    )
+    if($scope.passwd != ""){
+        $scope.stillNoPass=false;
+    }
+    else{
+        $scope.err=true;
+    }        
+
+
+};
     
 
     //check if login button was clicked
@@ -92,3 +113,8 @@ $('#poi-Modal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var modal = $(this)
   })
+
+  $('#recoverPasswd').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget)
+    var modal = $(this)
+  });
