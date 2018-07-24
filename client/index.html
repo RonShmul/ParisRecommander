@@ -42,7 +42,11 @@
                         Username: <input type="text" name="username" placeholder="enter username.." ng-model="UserInput.Username">
                         Password: <input type="password" name="password" placeholder="enter password.." ng-model="UserInput.Password">
                         <a class="navLink" ng-show="!isLoggedIn" id="recovery" ng-click="" data-toggle="modal" data-target="#recoverPasswd"><p style="white-space: nowrap;"><small>Forgot your password?</small></p></a>
+<<<<<<< HEAD
                         <input id="loginButton" type="submit" name="sign-in" ng-click="login()" value="Sign In">
+=======
+                        <input id="loginButton" type="submit" name="sign-in" ng-click="login()">
+>>>>>>> 7d14e8b0ff4f959e20da3220869dc00b294a1ebd
                     </form>
                 </div>
                 <div ></div>
@@ -55,14 +59,22 @@
         <div class="modal fade" id="recoverPasswd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                 <form class="form-inline" role="form" >
+<<<<<<< HEAD
                     <div class="modal-content" ng-show="!pass">
+=======
+                    <div class="modal-content" ng-show="stillNoPass">
+>>>>>>> 7d14e8b0ff4f959e20da3220869dc00b294a1ebd
                         <h5 class="modal-title">Please answer the folowing question to get your password</h5>
                         Username: <input type="text" name="username" ng-model="userRecover.Username">
                         What was the name of your first pet?<input type="text" name="ques1" ng-model="userRecover.SecurityAnswer1">
                         What is the name of your high-school?<input type="text" name="ques2" ng-model="userRecover.SecurityAnswer2">
                         <input id="recover" type="submit" name="showPass" ng-click="showPassword()" value="Get my password">
                     </div>
+<<<<<<< HEAD
                     <div class="modal-content" ng-show="pass && !err">
+=======
+                    <div class="modal-content" ng-show="!stillNoPass && !err">
+>>>>>>> 7d14e8b0ff4f959e20da3220869dc00b294a1ebd
                         <h3 class="modal-title">Your Password Is: </h3><br>
                         <h5 class="modal-title">{{passwd}}</h5>
                     </div>

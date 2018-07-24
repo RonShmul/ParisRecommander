@@ -67,9 +67,20 @@ angular.module('citiesApp')
 
         $scope.submit = function(invalid) {
             $("#goUpArrow").hide();
+<<<<<<< HEAD
             $scope.valid=false;
             
             if(!invalid && $scope.numOfCategories>1 && $scope.UserInput.Country !=="") {
+=======
+            var isValid = true;
+            $scope.valid=false;
+           // var x = document.getElementById("Username"); //todo: checks only empty fields- how to check other validations
+            //if(!x.checkValidity()){
+            //    isValid = false;
+            //}            
+            
+            if(!invalid && $scope.numOfCategories>1) { //Todo= change for country
+>>>>>>> 7d14e8b0ff4f959e20da3220869dc00b294a1ebd
                 $http.post(serverUrl +"users/register", JSON.stringify($scope.UserInput))
                 .then(function(response){
                     setToken.set(response.data.token);

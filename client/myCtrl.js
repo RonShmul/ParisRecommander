@@ -13,9 +13,16 @@ angular.module('citiesApp')
     $scope.pass=false;
     $scope.err=false;
     $("#goUpArrow").hide();
+<<<<<<< HEAD
 
 
     
+=======
+    $scope.userRecover={};
+    $scope.stillNoPass=true;
+    $scope.err=false;
+   
+>>>>>>> 7d14e8b0ff4f959e20da3220869dc00b294a1ebd
     $scope.$on('user:login', function(event,data) {
         $scope.isLoggedIn = data;
         loginService.setUserFromToken();
@@ -25,6 +32,24 @@ angular.module('citiesApp')
         }
     });
 
+    $scope.showPassword= function(){
+       $http.post(serverUrl +"users/restorePassword", JSON.stringify($scope.userRecover))
+       .then(function(response){
+            $scope.passwd=response.data.Password;            
+       },function(response){
+        $scope.err=true;
+        return response.data.message;
+       }
+    )
+    if($scope.passwd != ""){
+        $scope.stillNoPass=false;
+    }
+    else{
+        $scope.err=true;
+    }        
+
+
+};
     
 
     //check if login button was clicked
