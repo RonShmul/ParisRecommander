@@ -181,7 +181,7 @@ angular.module("citiesApp")
             for(var i = 0; i < self.userFavoritesList.length; i++) {
                 favPoints.Points.push(self.userFavoritesList[i].PointName);
             }
-            return $http.post(serverUrl +"users/auth/createFavoriteList", JSON.stringify(favPoints))
+            return $http.post(serverUrl +"users/auth/SaveFavoritesList", JSON.stringify(favPoints))
                 .then(function(response){
                     return true;
                 }, function(response) {

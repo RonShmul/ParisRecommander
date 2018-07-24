@@ -288,8 +288,8 @@ router.post('/auth/FavoritePointsOfInterest', function (req, res, next){
     });    
 });
 
-//create favorites table from a given array of points name
-router.post('/auth/createFavoriteList', function (req, res){
+//Save favorites sorted by priority
+router.post('/auth/SaveFavoritesList', function (req, res, next){
     DButilsAzure.execQuery(`DELETE FROM Users_Favorites WHERE Username='` + req.Username + "'")
     .then((response, err) => {
         var query = `INSERT INTO Users_Favorites (Username, PointName, PriorityIndex) VALUES `;
@@ -306,23 +306,6 @@ router.post('/auth/createFavoriteList', function (req, res){
             res.send({FavoriteList: err})});
     }).catch((err)=> {
         res.send({FavoriteList: err})});
-});
-
-//Save favorites sorted by priority
-router.post('/auth/SaveFavoritesList', function (req, res, next){
-    for(var i = 1; i <= req.body.Points.length; i++) {
-        DButilsAzure.execQuery(`UPDATE Users_Favorites SET PriorityIndex = `+i+` WHERE PointName = '`+ req.body.Points[i-1]+`'`)
-        .then((response, err) => {
-            if(err)
-                res.status(400).json({message: err.message});
-            else{
-                res.sendStatus(200);                
-            }
-        })
-        .catch(function(err) {
-            res.status(400).json({message: err.message});
-        });
-    }
 });
 
 
@@ -426,23 +409,22 @@ function insertRate(username, Poi, Rate){
         
         DButilsAzure.execQuery(`INSERT INTO Users_reviews (Username, PointName, Rate, DateReview) VALUES ('`+username+`', '`+Poi+`', `+Rate+`, GETDATE())`)
         .then(function(result){
-            DButilsAzure.execQuery(`SELECT * FROM dbo.Points_of_interests PointName ='`+ Poi + `'`)
+            DButilsAzure.execQuery(`SELECT * FROM dbo.Points_of_interests WHERE PointName ='`+ Poi + `'`)
             .then(function(poiEntry) {
                 var sum = poiEntry[0].SumOfRates;
                 var count = poiEntry[0].NumberOfRates + 1;
                 sum = sum + Rate;
                 var updatedRate = sum/count;
-                DButilsAzure.execQuery(`UPDATE dbo.Points_of_interests SET SumOfRates = ` + sum +`AND Rate = ` + updatedRate + ` WHERE PointName ='`+ Poi + `'`)
+                DButilsAzure.execQuery(`UPDATE dbo.Points_of_interests SET SumOfRates = ` + sum +`, Rate = ` + updatedRate + `, NumberOfRates = ` + count + ` WHERE PointName ='`+ Poi + `'`)
                 .then(function(result) {
-                    res.sendStatus(200);
+                    resolve(result);
                 }).catch(function(err) {
-                    res.send({message: err});
+                    reject(err);
                 });
 
             }).catch(function(err) {
-                res.send({message: err});
+                reject(err);
             });
-            resolve(result);
         })
         .catch(function(err){
             reject(err);
@@ -453,25 +435,24 @@ function insertRate(username, Poi, Rate){
 //return promise for update Rate
 function updateRate(username, Poi, newRate, oldRate){
     return new Promise(function(resolve , reject){
-        DButilsAzure.execQuery(`UPDATE Users_reviews SET Rate = `+newRate+` WHERE PointName ='`+ Poi + `' AND Username = '`+username+`'`)
+        DButilsAzure.execQuery(`UPDATE Users_reviews SET Rate = `+newRate+` WHERE PointName ='`+ Poi + `', Username = '`+username+`'`)
         .then(function(result){
-            DButilsAzure.execQuery(`SELECT * FROM dbo.Points_of_interests PointName ='`+ Poi + `'`)
+            DButilsAzure.execQuery(`SELECT * FROM dbo.Points_of_interests WHERE PointName ='`+ Poi + `'`)
             .then(function(poiEntry) {
                 var sum = poiEntry[0].SumOfRates;
                 var count = poiEntry[0].NumberOfRates;
                 sum = sum + newRate - oldRate;
                 var updatedRate = sum/count;
-                DButilsAzure.execQuery(`UPDATE dbo.Points_of_interests SET SumOfRates = ` + sum +`AND Rate = ` + updatedRate + ` WHERE PointName ='`+ Poi + `'`)
+                DButilsAzure.execQuery(`UPDATE dbo.Points_of_interests SET SumOfRates = ` + sum +`, Rate = ` + updatedRate + ` WHERE PointName ='`+ Poi + `'`)
                 .then(function(result) {
-                    res.sendStatus(200);
+                    resolve(result);
                 }).catch(function(err) {
-                    res.send({message: err});
+                    reject(err);
                 });
 
             }).catch(function(err) {
-                res.send({message: err});
+                reject(err);
             });
-            resolve(result);
         })
         .catch(function(err){
             reject(err);

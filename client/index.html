@@ -5,6 +5,10 @@
     
     <title>Travel in Paris</title>  
     <link rel="stylesheet" type="text/css" href="components/style.css">  
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
+   integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+   crossorigin=""/>
+
     <link href="https://fonts.googleapis.com/css?family=Tajawal" rel="stylesheet"> 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,6 +17,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
+   integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+   crossorigin=""></script>
 </head>
 <body ng-controller="myCtrl as indxCtrl">            
         <div>
@@ -34,7 +41,8 @@
                     <form class="form-inline" role="form">
                         Username: <input type="text" name="username" placeholder="enter username.." ng-model="UserInput.Username">
                         Password: <input type="password" name="password" placeholder="enter password.." ng-model="UserInput.Password">
-                        <input id="loginButton" type="submit" name="sign-in" ng-click="login()">
+                        <a class="navLink" ng-show="!isLoggedIn" id="recovery" ng-click="" data-toggle="modal" data-target="#recoverPasswd"><p style="white-space: nowrap;"><small>Forgot your password?</small></p></a>
+                        <input id="loginButton" type="submit" name="sign-in" ng-click="login()" value="Sign In">
                     </form>
                 </div>
                 <div ></div>
@@ -42,6 +50,30 @@
             <div class="pages" style="padding-top: 10vh;" ng-view ng-click="onClickOtherForLogin()"></div>
             <div id="goUpArrow"><button ng-click="scrollUp()"><img id="arrowUp-pic" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Circle-icons-arrow-up.svg/1024px-Circle-icons-arrow-up.svg.png"/></button></div>
         </div>
+
+        <!--+++++++++++modal for forgotten password+++++++++++-->
+        <div class="modal fade" id="recoverPasswd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                <form class="form-inline" role="form" >
+                    <div class="modal-content" ng-show="!pass">
+                        <h5 class="modal-title">Please answer the folowing question to get your password</h5>
+                        Username: <input type="text" name="username" ng-model="userRecover.Username">
+                        What was the name of your first pet?<input type="text" name="ques1" ng-model="userRecover.SecurityAnswer1">
+                        What is the name of your high-school?<input type="text" name="ques2" ng-model="userRecover.SecurityAnswer2">
+                        <input id="recover" type="submit" name="showPass" ng-click="showPassword()" value="Get my password">
+                    </div>
+                    <div class="modal-content" ng-show="pass && !err">
+                        <h3 class="modal-title">Your Password Is: </h3><br>
+                        <h5 class="modal-title">{{passwd}}</h5>
+                    </div>
+                    <div class="modal-content" ng-show="err">
+                        <h3 class="modal-title" style="padding:20px">One or more of the fields are incorrect...</h3>
+                    </div>
+                </form>
+                </div>
+        </div>
+
+        <!--end of modal-->
 
         <!--++++++++++++++++++++++++++++++++ modal ++++++++++++++++++++++++++++++++++++++++++++++++++++-->
  
@@ -64,7 +96,7 @@
                     <span class="poi-section-item"><span class="poi-rate">{{activePoi.Rate}}</span></span>
                 </div>
                 <img width="100px" ng-src="{{activePoi.Image}}" />
-
+                <div id="mapid"></div>
                 <div ng-controller="RatingCtrl">
                     <!--rate with stars-->
                     <div ng-show="isLoggedIn">
@@ -88,7 +120,7 @@
                     <h4 style="color:grey">Reviews:</h3>
                         <div ng-show="hasReviews" class="reviews" ng-repeat="review in activePoi.Reviews">
                             <div class="user-review"><img style="width: 30px" src="http://romanroadbowneighbourhoodplan.org/wp-content/uploads/2016/02/user77.png"/>{{review.Username}}</div>
-                            <div class="body-review"> {{review.Review}}</div>
+                            <div class="body-review"> <span>{{review.Review}}</span><span></span></div>
                         </div>
                         <div class="reviews" ng-show="!hasReviews">There are no reviews for this point of interest yet..</div>
                 </div>
@@ -100,9 +132,9 @@
         </div>
       </div>
 
-
               <!--+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-       
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="../node_modules/angular-local-storage/dist/angular-local-storage.js"></script>

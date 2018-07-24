@@ -6,7 +6,8 @@ angular.module('citiesApp')
         
         $scope.numOfCategories=0;
         $scope.UserInput = {
-            Categories: []
+            Categories: [],
+            Country: ""
         };
         /**
          * All the preperation
@@ -66,13 +67,9 @@ angular.module('citiesApp')
 
         $scope.submit = function(invalid) {
             $("#goUpArrow").hide();
-            var isValid = true;
-            var x = document.getElementById("Username"); //todo: checks only empty fields- how to check other validations
-            if(!x.checkValidity()){
-                isValid = false;
-            }            
+            $scope.valid=false;
             
-            if(!invalid) {
+            if(!invalid && $scope.numOfCategories>1 && $scope.UserInput.Country !=="") {
                 $http.post(serverUrl +"users/register", JSON.stringify($scope.UserInput))
                 .then(function(response){
                     setToken.set(response.data.token);
@@ -81,12 +78,13 @@ angular.module('citiesApp')
                     loginService.User = $scope.UserInput;
                     loginService.isLoggedIn = true;
                     $location.path( "/" );
+                    $rootScope.$broadcast('user:login',loginService.isLoggedIn);
                     $scope.UserInput = {};
                 },function(response){
                     alert(response.data.message);
                 });
             } else {
-                alert("Absolutely not..");
+                $scope.valid = true;
             }
         }
 }]);

@@ -51,7 +51,7 @@ router.get('/getSite/:PointName', function (req, res, next){
             return Promise.resolve(poi);
     }).then(function(poi){
         return new Promise(function(resolve , reject){
-            DButilsAzure.execQuery(`SELECT Review, Username, Rate FROM dbo.Users_Reviews WHERE dbo.Users_Reviews.PointName = '` + req.params.PointName + "'")
+            DButilsAzure.execQuery(`SELECT Review, Username, Rate , DateReview FROM dbo.Users_Reviews WHERE dbo.Users_Reviews.PointName = '` + req.params.PointName + "'")
             .then(function(result){
                 resolve(result);
             })
@@ -75,23 +75,6 @@ router.get('/getSite/:PointName', function (req, res, next){
         if(err)
             res.status(400).json({message: err.message});
         else{}
-    })
-    .catch(function(err) {
-        res.status(400).json({message: err.message});
-    });
-});
-//get point's reviews
-router.get('/getSiteReviews/:PointName', function (req, res, next){
-
-    DButilsAzure.execQuery(`SELECT Review, Username, Rate FROM dbo.Users_Reviews WHERE dbo.Users_Reviews.PointName = '` + req.params.PointName + "'")
-    .then((response, err) => {
-        if(err)
-            res.status(400).json({message: err.message});
-        else{
-            req.numberOfViewers = response[0].numberOfViewers + 1;
-            res.status(200).json({reviews: response});
-            next();
-            }
     })
     .catch(function(err) {
         res.status(400).json({message: err.message});

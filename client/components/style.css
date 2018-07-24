@@ -471,6 +471,7 @@ input[type=submit] {
 
 .in-row {
     display: inline;
+    cursor: pointer;
 }
 
 /*review field in modal*/
@@ -536,3 +537,4 @@ input[type=submit] {
 .comment-form .form-review .input-review.disabled {
     background-color: #E8E8E8;
 }
+#mapid { height: 300px; width: 100%; }

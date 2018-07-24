@@ -36,10 +36,10 @@ angular.module("citiesApp")
             self.User = User;
             return $http.post(serverUrl +"users/login", JSON.stringify(self.User))
                 .then(function(response){
+                    $location.path( "/" );
                     setToken.set(response.data.token);
                     self.isLoggedIn = true;
                     localStorageModel.set('token',response.data.token);
-                    $location.path( "/" );
                     return "SUCCESS";
                 },function(response){
                     return response.data.message;
